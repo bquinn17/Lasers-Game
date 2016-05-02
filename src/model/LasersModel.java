@@ -30,7 +30,7 @@ public class LasersModel extends Observable {
      * creates a new safe model from the given safe file
      * @param filename name of the safe file
      */
-    public LasersModel(String filename)  {
+    public LasersModel(String filename) {
         try {
             File file = new File(filename);
             Scanner in = new Scanner(file);
@@ -55,6 +55,7 @@ public class LasersModel extends Observable {
         } catch (FileNotFoundException fnfe){
             System.out.println(filename + " (The system cannot find the file specified)");
         }
+
     }
 
     /**
@@ -77,7 +78,7 @@ public class LasersModel extends Observable {
      * @param row number of rows in the safe
      * @param col number of columns in the safe
      */
-    void addLaser(int row, int col){
+    public void addLaser(int row, int col){
         if (row >= rows || row < 0){
             System.out.println("Error adding laser at: ("+ row +", "+ col +")");
             return;
@@ -123,7 +124,7 @@ public class LasersModel extends Observable {
      * @param row number of rows in the safe
      * @param col number of columns in the safe
      */
-    void removeLaser(int row, int col){
+    public void removeLaser(int row, int col){
         if (row >= rows || row < 0){
             System.out.println("Error removing laser at: ("+ row +", "+ col +")");
             return;
@@ -240,5 +241,93 @@ public class LasersModel extends Observable {
             str = str.substring(0, str.length()-1);
         }
         return str;
+    }
+
+    /**
+     * The verify command displays a status message that indicates whether the safe is valid or not. In order to be
+     * valid, none of the rules of the safe may be violated. Each tile that is not a pillar must have either a laser or
+     * beam covering it. Each pillar that requires a certain number of neighboring lasers must add up exactly. If two
+     * or more lasers are in sight of each other, in the cardinal directions, it is invalid.
+     * @return whether it is valid or not
+     */
+    public boolean verify(){
+        int rowLasers = 0;
+        ArrayList<Integer> colLasers= new ArrayList<>();
+        for (int i = 0; i < columns; i++) {
+            colLasers.add(i,0);
+        }
+
+        for (int j = 0; j < rows; j++) {
+            for (int i = 0; i < columns; i++) {
+                if (grid[j][i] == EMPTY) {
+                    System.out.println("Error verifying at : (" + j + " , " + i + ")");
+                    return false;
+                } else if (is_pillar(grid[j][i])) {
+                    colLasers.set(i, 0);
+                    rowLasers = 0;
+                    if (!check_pillar(grid[j][i], j, i)) {
+                        System.out.println("Error verifying at : (" + j + " , " + i + ")");
+                        return false;
+                    }
+                } else if (grid[j][i] == LASER) {
+                    if (colLasers.get(i) == 1) {
+                        System.out.println("Error verifying at : (" + j + " , " + i + ")");
+                        return false;
+                    }
+                    colLasers.set(i, 1);
+                    rowLasers++;
+                    if (rowLasers > 1) {
+                        System.out.println("Error verifying at : (" + j + " , " + i + ")");
+                        return false;
+                    }
+                } else if (grid[j][i] == PILLAR) {
+                    rowLasers = 0;
+                    colLasers.set(i, 0);
+                }
+            }
+            rowLasers = 0;
+        }
+        return true;
+    }
+
+    /**
+     * checks to see if the position is a number, meaning that it is a pillar
+     * @param ch the character a certain position
+     * @return whether or not it is a pillar
+     */
+    private boolean is_pillar(char ch){
+        String str = String.valueOf(ch);
+        try {
+            nums.contains(Integer.parseInt(str));
+        } catch (NumberFormatException ex){
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * Sees if each piller has the correct amount of lasers
+     * @param ch number of lasers it should have
+     * @param j row of pillar to check
+     * @param i column of pillar to check
+     * @return wheather it is correct or not.
+     */
+    private boolean check_pillar(char ch, int j, int i){
+        int num = Integer.parseInt(String.valueOf(ch));
+        int count = 0;
+        if(j + 1 < rows && grid[j+1][i] == LASER){
+            count++;
+        }
+        if(j - 1 >= 0 && grid[j-1][i] == LASER){
+            count++;
+        }
+        if(i + 1 < columns && grid[j][i+1] == LASER){
+            count++;
+        }
+        if(i - 1 >= 0 &&grid[j][i-1] == LASER){
+            count++;
+        }
+        return count == num;
     }
 }
