@@ -1,6 +1,8 @@
 package ptui;
 
 import model.LasersModel;
+import java.io.*;
+import java.util.Scanner;
 
 /**
  * This class represents the controller portion of the plain text UI.
@@ -22,11 +24,22 @@ public class ControllerPTUI  {
         this.model = model;
     }
 
+
+
+
     /**
      * Run the main loop.  This is the entry point for the controller
      * @param inputFile The name of the input command file, if specified
      */
-    public void run(String inputFile) {
-        // TODO
+    public void run(String inputFile) throws FileNotFoundException{
+        Scanner in = new Scanner(new File(inputFile));
+        while (in.hasNextLine()){
+            String[] str = in.nextLine().split(" ");
+            System.out.print(">");
+            for (int i = 0; i < str.length; i++) {
+                System.out.print(" " + str[i]);
+            }
+            System.out.println("");
+        }
     }
 }
