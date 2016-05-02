@@ -15,8 +15,9 @@ import java.util.Optional;
  *
  * @author Sean Strout @ RIT CS
  * @author James Heliotis @ RIT CS
- * @author YOUR NAME HERE
- */
+ * @author Bryan Quinn
+ * @author Chris Cassidy
+ * */
 public class Backtracker {
 
     private boolean debug;

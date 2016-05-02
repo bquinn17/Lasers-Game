@@ -11,8 +11,9 @@ import java.util.Scanner;
  * the operations that are input in the run method.
  *
  * @author Sean Strout @ RIT CS
- * @author YOUR NAME HERE
- */
+ * @author Bryan Quinn
+ * @author Chris Cassidy
+ * */
 public class ControllerPTUI  {
     /** The UI's connection to the model */
     private LasersModel model;

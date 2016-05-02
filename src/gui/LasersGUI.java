@@ -18,7 +18,8 @@ import java.util.Observer;
  * and receives updates from it.
  *
  * @author Sean Strout @ RIT CS
- * @author YOUR NAME HERE
+ * @author Bryan Quinn
+ * @author Chris Cassidy
  */
 public class LasersGUI extends Application implements Observer {
     /** The UI's connection to the model */
@@ -31,14 +32,9 @@ public class LasersGUI extends Application implements Observer {
     public void init() throws Exception {
         // the init method is run before start.  the file name is extracted
         // here and then the model is created.
-        //try {
-            Parameters params = getParameters();
-            String filename = params.getRaw().get(0);
-            this.model = new LasersModel(filename);
-        /*} catch (FileNotFoundException fnfe) {
-            System.out.println(fnfe.getMessage());
-            System.exit(-1);
-        } */
+        Parameters params = getParameters();
+        String filename = params.getRaw().get(0);
+        this.model = new LasersModel(filename);
         this.model.addObserver(this);
     }
 

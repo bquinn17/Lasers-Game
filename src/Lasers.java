@@ -3,8 +3,6 @@ import javafx.application.Application;
 import ptui.ControllerPTUI;
 import ptui.LasersPTUI;
 
-import java.io.FileNotFoundException;
-
 /**
  * This is the main class for the Lasers project.  It is used to run either
  * the plain text UI (LasersPTUI) or the JavaFX graphical UI (LasersGUI).
@@ -60,26 +58,21 @@ public class Lasers {
         }
 
         // now either launch the GUI or create the PTUI and pass control to it
-        try {
-            switch (mode) {
-                case GUI:
-                    // this launches the GUI and passes in the safe file.
-                    Application.launch(LasersGUI.class, safeFile);
-                    break;
-                case PTUI:
-                    // create the "view" first
-                    LasersPTUI ptui = new LasersPTUI(safeFile);
-                    // now create the "controller"
-                    ControllerPTUI ctrlr = new ControllerPTUI(ptui.getModel());
-                    // now pass control to the run method of the controller
-                    ctrlr.run(inputFile);
-                    break;
-                case UNKNOWN:
-                    usage();
-            }
-        } catch (FileNotFoundException fnfe) {
-            System.out.println(fnfe.getMessage());
-            System.exit(-1);
+        switch (mode) {
+            case GUI:
+                // this launches the GUI and passes in the safe file.
+                Application.launch(LasersGUI.class, safeFile);
+                break;
+            case PTUI:
+                // create the "view" first
+                LasersPTUI ptui = new LasersPTUI(safeFile);
+                // now create the "controller"
+                ControllerPTUI ctrlr = new ControllerPTUI(ptui.getModel());
+                // now pass control to the run method of the controller
+                ctrlr.run(inputFile);
+                break;
+            case UNKNOWN:
+                usage();
         }
     }
 }

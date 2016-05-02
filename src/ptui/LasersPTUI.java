@@ -11,8 +11,9 @@ import java.util.Observer;
  * You should create the model here, and then implement the update method.
  *
  * @author Sean Strout @ RIT CS
- * @author YOUR NAME HERE
- */
+ * @author Bryan Quinn
+ * @author Chris Cassidy
+ * */
 public class LasersPTUI implements Observer {
     /** The UI's connection to the model */
     private LasersModel model;
