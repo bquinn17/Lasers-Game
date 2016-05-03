@@ -2,7 +2,9 @@ package gui;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -100,14 +102,51 @@ public class LasersGUI extends Application implements Observer {
         // TODO
         init(primaryStage);  // do all your UI initialization here
 
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(10, 10, 10, 10));
+        for (int col = 0; col < this.model.getColumns() ; col++) {
+            grid.addColumn(col);
+            for (int row = 0; row < this.model.getRows(); row++) {
+                //Rectangle rect = new Rectangle(50, 50, Color.GRAY);
+                //int finalRow = model.getRemainingGuesses() - row;
+                //int finalCol = col + 1;
+                //rect.setOnMouseClicked(event -> model.choose(finalRow, finalCol));
+                //grid.add(rect,col,row);
+                //guesses[col][row] = rect;
+            }
+        }
+
+        Button check = new Button("Check");
+        Button hint = new Button("Hint");
+        Button solve = new Button("Solve");
+        Button restart = new Button("Restart");
+        Button load = new Button("Load");
 
 
-        HBox top = new HBox();
+        check.setOnAction(e -> {});
+        hint.setOnAction(e -> {});
+        solve.setOnAction(e -> {});
+        restart.setOnAction(e -> {});
+        load.setOnAction(e -> {});
+
+
+
+
+
         HBox bottom = new HBox();
+        bottom.setSpacing(10);
+        bottom.getChildren().addAll(check, hint, solve, restart, load);
+        bottom.setPadding(new Insets(10,10,10,10));
 
-
+        border.setTop(new Label("put something here"));
         border.setPadding(new Insets(10,10,10,10));
+        border.setBottom(bottom);
+        border.setCenter(grid);
+
+        Scene scene = new Scene(border);
         primaryStage.setTitle("Lasers");
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

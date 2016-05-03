@@ -330,4 +330,20 @@ public class LasersModel extends Observable {
         }
         return count == num;
     }
+
+    /**
+     * Allows access to columns
+     * @return columns
+     */
+    public int getColumns() {
+        return columns;
+    }
+
+    /**
+     * Allows access to rows
+     * @return rows
+     */
+    public int getRows() {
+        return rows;
+    }
 }
