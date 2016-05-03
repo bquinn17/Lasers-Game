@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.LasersModel;
@@ -52,6 +53,9 @@ public class LasersGUI extends Application implements Observer {
      * @param bgImgName the name of the image file
      */
     private void setButtonBackground(Button button, String bgImgName) {
+        Image laserImg = new Image(getClass().getResourceAsStream("resources/"+ bgImgName));
+        ImageView laserIcon = new ImageView(laserImg);
+        button.setGraphic(laserIcon);
         BackgroundImage backgroundImage = new BackgroundImage(
                 new Image( getClass().getResource("resources/" + bgImgName).toExternalForm()),
                 BackgroundRepeat.NO_REPEAT,
@@ -107,7 +111,7 @@ public class LasersGUI extends Application implements Observer {
 
         GridPane grid = new GridPane();
         //grid.setPadding(new Insets(10, 10, 10, 10));
-        grid.setHgap(5); grid.setVgap(5);
+        //grid.setHgap(0); grid.setVgap(0);
         grid.setAlignment(Pos.CENTER);
         for (int row = 0; row < this.model.getRows() ; row++) {
             grid.addColumn(row);
