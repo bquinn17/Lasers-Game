@@ -23,6 +23,11 @@ public class LasersModel extends Observable {
 
     private int rows;
     private int columns;
+
+    public char getGrid(int col, int row) {
+        return grid[col][row];
+    }
+
     private char[][] grid;
     private ArrayList<Integer> nums;
 

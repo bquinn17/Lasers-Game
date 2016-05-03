@@ -2,6 +2,7 @@ package gui;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -29,6 +30,7 @@ public class LasersGUI extends Application implements Observer {
     /** this can be removed - it is used to demonstrates the button toggle */
     private static boolean status = true;
     private BorderPane border;
+    private Button[][] buttons;
 
     @Override
     public void init() throws Exception {
@@ -39,6 +41,7 @@ public class LasersGUI extends Application implements Observer {
         this.model = new LasersModel(filename);
         this.model.addObserver(this);
         border = new BorderPane();
+        buttons = new Button[model.getColumns()][model.getRows()];
     }
 
     /**
@@ -103,10 +106,41 @@ public class LasersGUI extends Application implements Observer {
         init(primaryStage);  // do all your UI initialization here
 
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10, 10, 10, 10));
+        //grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setHgap(5); grid.setVgap(5);
+        grid.setAlignment(Pos.CENTER);
         for (int col = 0; col < this.model.getColumns() ; col++) {
             grid.addColumn(col);
             for (int row = 0; row < this.model.getRows(); row++) {
+                Button current = new Button();
+                current.setPadding(new Insets(10,10,10,10));
+                switch (model.getGrid(col,row)){
+                    case '0':
+                        setButtonBackground(current, "pillar0.png");
+                        break;
+                    case '1':
+                        setButtonBackground(current, "pillar1.png");
+                        break;
+                    case '2':
+                        setButtonBackground(current, "pillar2.png");
+                        break;
+                    case '3':
+                        setButtonBackground(current, "pillar3.png");
+                        break;
+                    case '4':
+                        setButtonBackground(current, "pillar4.png");
+                        break;
+                    case 'X':
+                        setButtonBackground(current, "pillarX.png");
+                        break;
+                    default:
+                        setButtonBackground(current, "white.png");
+                        int finalCol = col;
+                        int finalRow = row;
+                        current.setOnAction(e -> setLaser(finalCol, finalRow));
+                }
+                buttons[col][row] = current;
+                grid.add(current, col, row);
                 //Rectangle rect = new Rectangle(50, 50, Color.GRAY);
                 //int finalRow = model.getRemainingGuesses() - row;
                 //int finalCol = col + 1;
@@ -123,15 +157,11 @@ public class LasersGUI extends Application implements Observer {
         Button load = new Button("Load");
 
 
-        check.setOnAction(e -> {});
-        hint.setOnAction(e -> {});
-        solve.setOnAction(e -> {});
-        restart.setOnAction(e -> {});
-        load.setOnAction(e -> {});
-
-
-
-
+        check.setOnAction(e -> check());
+        hint.setOnAction(e -> hint());
+        solve.setOnAction(e -> solve());
+        restart.setOnAction(e -> restart());
+        load.setOnAction(e -> load());
 
         HBox bottom = new HBox();
         bottom.setSpacing(10);
@@ -147,7 +177,34 @@ public class LasersGUI extends Application implements Observer {
         primaryStage.setTitle("Lasers");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
+        Image schuyler = new Image(getClass().getResourceAsStream("resources/Schuyler.png"));
+        primaryStage.getIcons().add((schuyler));
         primaryStage.show();
+    }
+
+    private void load() {
+        //TODO
+    }
+
+    private void restart() {
+        //TODO
+    }
+
+    private void solve() {
+        //TODO
+    }
+
+    private void hint() {
+        //TODO
+    }
+
+    private void check() {
+        //TODO
+    }
+
+    private void setLaser(int col, int row) {
+        System.out.println("test");
+        //TODO
     }
 
     @Override
