@@ -1,10 +1,9 @@
 package gui;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.LasersModel;
@@ -27,6 +26,7 @@ public class LasersGUI extends Application implements Observer {
 
     /** this can be removed - it is used to demonstrates the button toggle */
     private static boolean status = true;
+    private BorderPane border;
 
     @Override
     public void init() throws Exception {
@@ -36,6 +36,7 @@ public class LasersGUI extends Application implements Observer {
         String filename = params.getRaw().get(0);
         this.model = new LasersModel(filename);
         this.model.addObserver(this);
+        border = new BorderPane();
     }
 
     /**
@@ -63,7 +64,7 @@ public class LasersGUI extends Application implements Observer {
      *
      * @param stage the stage to add components into
      */
-    private void buttonDemo(Stage stage) {
+    /*private void buttonDemo(Stage stage) {
         // this demonstrates how to create a button and attach a foreground and
         // background image to it.
         Button button = new Button();
@@ -83,22 +84,29 @@ public class LasersGUI extends Application implements Observer {
 
         Scene scene = new Scene(button);
         stage.setScene(scene);
-    }
+    }*/
 
     /**
      * The
      * @param stage the stage to add UI components into
      */
-    private void init(Stage stage) {
+     private void init(Stage stage) {
         // TODO
-        buttonDemo(stage);  // this can be removed/altered
-    }
+        //buttonDemo(stage);  // this can be removed/altered
+     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         // TODO
         init(primaryStage);  // do all your UI initialization here
 
+
+
+        HBox top = new HBox();
+        HBox bottom = new HBox();
+
+
+        border.setPadding(new Insets(10,10,10,10));
         primaryStage.setTitle("Lasers");
         primaryStage.show();
     }
