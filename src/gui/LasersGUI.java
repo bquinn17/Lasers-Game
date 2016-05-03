@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import model.LasersModel;
 
@@ -32,6 +33,7 @@ public class LasersGUI extends Application implements Observer {
     private static boolean status = true;
     private BorderPane border;
     private Button[][] buttons;
+    private Label message;
 
     @Override
     public void init() throws Exception {
@@ -145,12 +147,6 @@ public class LasersGUI extends Application implements Observer {
                 }
                 buttons[row][col] = current;
                 grid.add(current, row, col);
-                //Rectangle rect = new Rectangle(50, 50, Color.GRAY);
-                //int finalRow = model.getRemainingGuesses() - row;
-                //int finalCol = col + 1;
-                //rect.setOnMouseClicked(event -> model.choose(finalRow, finalCol));
-                //grid.add(rect,col,row);
-                //guesses[col][row] = rect;
             }
         }
 
@@ -170,9 +166,16 @@ public class LasersGUI extends Application implements Observer {
         HBox bottom = new HBox();
         bottom.setSpacing(10);
         bottom.getChildren().addAll(check, hint, solve, restart, load);
+        bottom.setAlignment(Pos.CENTER);
         bottom.setPadding(new Insets(10,10,10,10));
 
-        border.setTop(new Label("put something here"));
+        message = new Label("put something here");
+        message.setTextAlignment(TextAlignment.CENTER);
+        HBox top = new HBox();
+        top.getChildren().add(message);
+        top.setAlignment(Pos.CENTER);
+
+        border.setTop(top);
         border.setPadding(new Insets(10,10,10,10));
         border.setBottom(bottom);
         border.setCenter(grid);
