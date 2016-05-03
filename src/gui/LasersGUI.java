@@ -209,7 +209,8 @@ public class LasersGUI extends Application implements Observer {
         //TODO
     }
 
-    private void setLaser(int col, int row) {
+    private void setLaser(int row, int col) {
+        model.addLaser(row, col);
         System.out.println("test");
         //TODO
     }
