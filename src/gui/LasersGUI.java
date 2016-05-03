@@ -41,7 +41,7 @@ public class LasersGUI extends Application implements Observer {
         this.model = new LasersModel(filename);
         this.model.addObserver(this);
         border = new BorderPane();
-        buttons = new Button[model.getColumns()][model.getRows()];
+        buttons = new Button[model.getRows()][model.getColumns()];
     }
 
     /**
@@ -109,12 +109,12 @@ public class LasersGUI extends Application implements Observer {
         //grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setHgap(5); grid.setVgap(5);
         grid.setAlignment(Pos.CENTER);
-        for (int col = 0; col < this.model.getColumns() ; col++) {
-            grid.addColumn(col);
-            for (int row = 0; row < this.model.getRows(); row++) {
+        for (int row = 0; row < this.model.getRows() ; row++) {
+            grid.addColumn(row);
+            for (int col = 0; col < this.model.getColumns(); col++) {
                 Button current = new Button();
                 current.setPadding(new Insets(10,10,10,10));
-                switch (model.getGrid(col,row)){
+                switch (model.getGrid(row,col)){
                     case '0':
                         setButtonBackground(current, "pillar0.png");
                         break;
@@ -137,10 +137,10 @@ public class LasersGUI extends Application implements Observer {
                         setButtonBackground(current, "white.png");
                         int finalCol = col;
                         int finalRow = row;
-                        current.setOnAction(e -> setLaser(finalCol, finalRow));
+                        current.setOnAction(e -> setLaser(finalRow, finalCol));
                 }
-                buttons[col][row] = current;
-                grid.add(current, col, row);
+                buttons[row][col] = current;
+                grid.add(current, row, col);
                 //Rectangle rect = new Rectangle(50, 50, Color.GRAY);
                 //int finalRow = model.getRemainingGuesses() - row;
                 //int finalCol = col + 1;

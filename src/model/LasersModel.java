@@ -24,8 +24,8 @@ public class LasersModel extends Observable {
     private int rows;
     private int columns;
 
-    public char getGrid(int col, int row) {
-        return grid[col][row];
+    public char getGrid(int row, int col) {
+        return grid[row][col];
     }
 
     private char[][] grid;
