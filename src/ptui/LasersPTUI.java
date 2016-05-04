@@ -24,12 +24,7 @@ public class LasersPTUI implements Observer {
      * @param filename the safe file name
      */
     public LasersPTUI(String filename) {
-        //try {
-            this.model = new LasersModel(filename);
-        /*} catch (FileNotFoundException fnfe) {
-            System.out.println(fnfe.getMessage());
-            System.exit(-1);
-        }*/
+        this.model = new LasersModel(filename);
         this.model.addObserver(this);
         controller = new ControllerPTUI(this.model);
 
@@ -50,6 +45,7 @@ public class LasersPTUI implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         System.out.println(model.getMessage());
+        System.out.println("test");
         /*if(arg != null){
             System.out.println(arg);
 

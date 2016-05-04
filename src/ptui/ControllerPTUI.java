@@ -80,9 +80,6 @@ public class ControllerPTUI  {
                     }
                     break;
                 case 'd':
-                    model.notifyObservers();
-                    model.hasChanged();
-                    model.notifyObservers("fuck");
                     System.out.println(this.model);
                     break;
                 case 'h':
