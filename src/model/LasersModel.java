@@ -24,6 +24,8 @@ public class LasersModel extends Observable {
     private int rows;
     private int columns;
 
+    private String message;
+
     public char getGrid(int row, int col) {
         return grid[row][col];
     }
@@ -85,11 +87,15 @@ public class LasersModel extends Observable {
      */
     public void addLaser(int row, int col){
         if (row >= rows || row < 0){
-            System.out.println("Error adding laser at: ("+ row +", "+ col +")");
+            message = "Error adding laser at: ("+ row +", "+ col +")";
+            notifyAll();
+            //System.out.println("Error adding laser at: ("+ row +", "+ col +")");
             return;
         }
         if (col >= columns || col < 0){
-            System.out.println("Error adding laser at: ("+ row +", "+ col +")");
+            message = "Error adding laser at: ("+ row +", "+ col +")";
+            notifyAll();
+            //System.out.println("Error adding laser at: ("+ row +", "+ col +")");
             return;
         }
 
@@ -115,11 +121,15 @@ public class LasersModel extends Observable {
             while(--bCol >= 0 && (grid[bRow][bCol] == EMPTY || grid[bRow][bCol] == BEAM)){
                 grid[bRow][bCol] = BEAM;
             }
-            System.out.println("Laser added at: ("+ row +", "+ col +")");
+            message = "Laser added at: ("+ row +", "+ col +")";
+            notifyAll();
+            //System.out.println("Laser added at: ("+ row +", "+ col +")");
 
         }
         else{
-            System.out.println("Error adding laser at: ("+ row +", "+ col +")");
+            message = "Error adding laser at: ("+ row +", "+ col +")";
+            notifyAll();
+            //System.out.println("Error adding laser at: ("+ row +", "+ col +")");
         }
     }
 
@@ -131,11 +141,15 @@ public class LasersModel extends Observable {
      */
     public void removeLaser(int row, int col){
         if (row >= rows || row < 0){
-            System.out.println("Error removing laser at: ("+ row +", "+ col +")");
+            message = "Error removing laser at: ("+ row +", "+ col +")";
+            notifyAll();
+            //System.out.println("Error removing laser at: ("+ row +", "+ col +")");
             return;
         }
         if (col >= columns || col < 0){
-            System.out.println("Error removing laser at: ("+ row +", "+ col +")");
+            message = "Error removing laser at: ("+ row +", "+ col +")";
+            notifyAll();
+            //System.out.println("Error removing laser at: ("+ row +", "+ col +")");
             return;
         }
 
@@ -162,11 +176,15 @@ public class LasersModel extends Observable {
                 grid[bRow][bCol] = EMPTY;
             }
             fixLasers();
-            System.out.println("Laser removed at: ("+ row +", "+ col +")");
+            message = "Laser removed at: ("+ row +", "+ col +")";
+            notifyAll();
+            //System.out.println("Laser removed at: ("+ row +", "+ col +")");
 
         }
         else{
-            System.out.println("Error removing laser at: ("+ row +", "+ col +")");
+            message = "Error removing laser at: ("+ row +", "+ col +")";
+            notifyAll();
+            //System.out.println("Error removing laser at: ("+ row +", "+ col +")");
         }
 
     }
@@ -265,24 +283,32 @@ public class LasersModel extends Observable {
         for (int j = 0; j < rows; j++) {
             for (int i = 0; i < columns; i++) {
                 if (grid[j][i] == EMPTY) {
-                    System.out.println("Error verifying at : (" + j + " , " + i + ")");
+                    message = "Error verifying at : (" + j + " , " + i + ")";
+                    notifyAll();
+                    //System.out.println("Error verifying at : (" + j + " , " + i + ")");
                     return false;
                 } else if (is_pillar(grid[j][i])) {
                     colLasers.set(i, 0);
                     rowLasers = 0;
                     if (!check_pillar(grid[j][i], j, i)) {
-                        System.out.println("Error verifying at : (" + j + " , " + i + ")");
+                        message = "Error verifying at : (" + j + " , " + i + ")";
+                        notifyAll();
+                        //System.out.println("Error verifying at : (" + j + " , " + i + ")");
                         return false;
                     }
                 } else if (grid[j][i] == LASER) {
                     if (colLasers.get(i) == 1) {
-                        System.out.println("Error verifying at : (" + j + " , " + i + ")");
+                        message = "Error verifying at : (" + j + " , " + i + ")";
+                        notifyAll();
+                        //System.out.println("Error verifying at : (" + j + " , " + i + ")");
                         return false;
                     }
                     colLasers.set(i, 1);
                     rowLasers++;
                     if (rowLasers > 1) {
-                        System.out.println("Error verifying at : (" + j + " , " + i + ")");
+                        message = "Error verifying at : (" + j + " , " + i + ")";
+                        notifyAll();
+                        //System.out.println("Error verifying at : (" + j + " , " + i + ")");
                         return false;
                     }
                 } else if (grid[j][i] == PILLAR) {
@@ -350,5 +376,9 @@ public class LasersModel extends Observable {
      */
     public int getRows() {
         return rows;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }
