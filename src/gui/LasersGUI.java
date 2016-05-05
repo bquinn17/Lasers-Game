@@ -48,6 +48,7 @@ public class LasersGUI extends Application implements Observer {
         this.model.addObserver(this);
         border = new BorderPane();
         buttons = new Button[model.getRows()][model.getColumns()];
+        status = false;
     }
 
     /**
@@ -195,11 +196,18 @@ public class LasersGUI extends Application implements Observer {
                 setButtonBackground(button, "white.png");
                 break;
             case 'L':
-
+                setButtonBackground(button, "yellow.png");
+                Image laserImg = new Image(getClass().getResourceAsStream("resources/laser.png"));
+                ImageView laserIcon = new ImageView(laserImg);
+                button.setGraphic(laserIcon);
+                break;
+            case '*':
+                setButtonBackground(button, "beam.png");
+                break;
             default:
+                break;
         }
     }
-
 
     private void load(Stage stage) {
         restart();
@@ -228,9 +236,15 @@ public class LasersGUI extends Application implements Observer {
     }
 
     private void setLaser(int row, int col) {
-        model.addLaser(row, col);
-        setButtonBackground(buttons[row][col], "laser.png");
-        System.out.println("test");
+        status = !status;
+        if(status) {
+            model.addLaser(row, col);
+            Button button = buttons[row][col];
+            setButtonBackground(button, "yellow.png");
+            Image laserImg = new Image(getClass().getResourceAsStream("resources/laser.png"));
+            ImageView laserIcon = new ImageView(laserImg);
+            button.setGraphic(laserIcon);
+        }
         //TODO
     }
 
@@ -238,8 +252,7 @@ public class LasersGUI extends Application implements Observer {
         char [][] grid = model.getGrid();
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-
-
+                buttonToPic(buttons[i][j], grid[i][j]);
             }
 
         }
