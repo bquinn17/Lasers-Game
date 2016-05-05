@@ -354,6 +354,7 @@ public class LasersModel extends Observable {
         return rows;
     }
 
+
     public String getMessage() {
         return message;
     }

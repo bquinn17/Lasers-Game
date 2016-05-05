@@ -45,12 +45,5 @@ public class LasersPTUI implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         System.out.println(model.getMessage());
-        System.out.println("test");
-        /*if(arg != null){
-            System.out.println(arg);
-
-        }
-        System.out.println("test");
-        System.out.println(this.model);*/
     }
 }
