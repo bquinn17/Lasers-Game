@@ -120,31 +120,10 @@ public class LasersGUI extends Application implements Observer {
             for (int col = 0; col < this.model.getColumns(); col++) {
                 Button current = new Button();
                 current.setPadding(new Insets(10,10,10,10));
-                switch (model.getGrid(row,col)){
-                    case '0':
-                        setButtonBackground(current, "pillar0.png");
-                        break;
-                    case '1':
-                        setButtonBackground(current, "pillar1.png");
-                        break;
-                    case '2':
-                        setButtonBackground(current, "pillar2.png");
-                        break;
-                    case '3':
-                        setButtonBackground(current, "pillar3.png");
-                        break;
-                    case '4':
-                        setButtonBackground(current, "pillar4.png");
-                        break;
-                    case 'X':
-                        setButtonBackground(current, "pillarX.png");
-                        break;
-                    default:
-                        setButtonBackground(current, "white.png");
-                        int finalCol = col;
-                        int finalRow = row;
-                        current.setOnAction(e -> setLaser(finalRow, finalCol));
-                }
+                buttonToPic(current, model.getGridAtPos(row,col));
+                int finalCol = col;
+                int finalRow = row;
+                current.setOnAction(e -> setLaser(finalRow, finalCol));
                 buttons[row][col] = current;
                 grid.add(current, row, col);
             }
@@ -169,7 +148,7 @@ public class LasersGUI extends Application implements Observer {
         bottom.setAlignment(Pos.CENTER);
         bottom.setPadding(new Insets(10,10,10,10));
 
-        message = new Label("put something here");
+        message = new Label("");
         message.setTextAlignment(TextAlignment.CENTER);
         HBox top = new HBox();
         top.getChildren().add(message);
@@ -187,6 +166,35 @@ public class LasersGUI extends Application implements Observer {
         Image schuyler = new Image(getClass().getResourceAsStream("resources/Schuyler.png"));
         primaryStage.getIcons().add((schuyler));
         primaryStage.show();
+    }
+
+    private void buttonToPic(Button button, char ch){
+        switch (ch){
+            case '0':
+                setButtonBackground(button, "pillar0.png");
+                break;
+            case '1':
+                setButtonBackground(button, "pillar1.png");
+                break;
+            case '2':
+                setButtonBackground(button, "pillar2.png");
+                break;
+            case '3':
+                setButtonBackground(button, "pillar3.png");
+                break;
+            case '4':
+                setButtonBackground(button, "pillar4.png");
+                break;
+            case 'X':
+                setButtonBackground(button, "pillarX.png");
+                break;
+            case '.':
+                setButtonBackground(button, "white.png");
+                break;
+            case 'L':
+
+            default:
+        }
     }
 
     private void load() {
@@ -215,8 +223,21 @@ public class LasersGUI extends Application implements Observer {
         //TODO
     }
 
+    private void refreshView() {
+        char [][] grid = model.getGrid();
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+
+
+            }
+
+        }
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         this.message.setText(model.getMessage());
+        this.refreshView();
     }
+
 }

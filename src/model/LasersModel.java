@@ -26,10 +26,6 @@ public class LasersModel extends Observable {
 
     private String message;
 
-    public char getGrid(int row, int col) {
-        return grid[row][col];
-    }
-
     private char[][] grid;
     private ArrayList<Integer> nums;
 
@@ -38,8 +34,13 @@ public class LasersModel extends Observable {
      * @param filename name of the safe file
      */
     public LasersModel(String filename) {
+        File file = new File(filename);
+        makeGrid(file, filename);
+
+    }
+
+    public void makeGrid(File file, String filename){
         try {
-            File file = new File(filename);
             Scanner in = new Scanner(file);
 
             int row = in.nextInt();
@@ -62,7 +63,6 @@ public class LasersModel extends Observable {
         } catch (FileNotFoundException fnfe){
             System.out.println(filename + " (The system cannot find the file specified)");
         }
-
     }
 
     /**
@@ -354,8 +354,13 @@ public class LasersModel extends Observable {
         return rows;
     }
 
-
     public String getMessage() {
         return message;
     }
+
+    public char getGridAtPos(int row, int col) {
+        return grid[row][col];
+    }
+
+    public char[][] getGrid(){return this.grid;}
 }
