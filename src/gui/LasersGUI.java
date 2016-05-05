@@ -48,7 +48,7 @@ public class LasersGUI extends Application implements Observer {
         this.model.addObserver(this);
         border = new BorderPane();
         buttons = new Button[model.getRows()][model.getColumns()];
-        status = false;
+        status = true;
     }
 
     /**
@@ -236,16 +236,19 @@ public class LasersGUI extends Application implements Observer {
     }
 
     private void setLaser(int row, int col) {
-        status = !status;
-        if(status) {
+        Button button = buttons[row][col];
+        if(model.getGridAtPos(row, col) != 'L') {
             model.addLaser(row, col);
-            Button button = buttons[row][col];
             setButtonBackground(button, "yellow.png");
             Image laserImg = new Image(getClass().getResourceAsStream("resources/laser.png"));
             ImageView laserIcon = new ImageView(laserImg);
             button.setGraphic(laserIcon);
         }
-        //TODO
+        else {
+            model.removeLaser(row, col);
+            setButtonBackground(button, "white.png");
+        }
+
     }
 
     private void refreshView() {
