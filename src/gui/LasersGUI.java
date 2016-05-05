@@ -10,9 +10,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.LasersModel;
 
+import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -34,6 +36,7 @@ public class LasersGUI extends Application implements Observer {
     private BorderPane border;
     private Button[][] buttons;
     private Label message;
+    private File file;
 
     @Override
     public void init() throws Exception {
@@ -140,7 +143,7 @@ public class LasersGUI extends Application implements Observer {
         hint.setOnAction(e -> hint());
         solve.setOnAction(e -> solve());
         restart.setOnAction(e -> restart());
-        load.setOnAction(e -> load());
+        load.setOnAction(e -> load(primaryStage));
 
         HBox bottom = new HBox();
         bottom.setSpacing(10);
@@ -197,8 +200,15 @@ public class LasersGUI extends Application implements Observer {
         }
     }
 
-    private void load() {
-        //TODO
+
+    private void load(Stage stage) {
+        restart();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Safe File");
+        file = fileChooser.showOpenDialog(stage);
+        //if (file != null) {
+            //return file;
+        //}
     }
 
     private void restart() {
