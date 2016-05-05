@@ -219,6 +219,7 @@ public class LasersGUI extends Application implements Observer {
 
     private void setLaser(int row, int col) {
         model.addLaser(row, col);
+        setButtonBackground(buttons[row][col], "laser.png");
         System.out.println("test");
         //TODO
     }

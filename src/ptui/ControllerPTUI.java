@@ -41,6 +41,7 @@ public class ControllerPTUI  {
                         System.out.print(" " + str[i]);
                     }
                     System.out.println("");
+                    handle_command(str);
                 }
             } catch (FileNotFoundException ex){
                 System.out.println(inputFile + " (The system cannot find the file specified)");
