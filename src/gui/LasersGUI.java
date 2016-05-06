@@ -253,7 +253,6 @@ public class LasersGUI extends Application implements Observer {
             this.message.setText("");
             this.refreshView();
             //TODO resize window.
-            //TODO safe cannot resize to bigger dimensions
             //http://stackoverflow.com/questions/3391373/dynamic-instant-resize-in-javafx
         }
         //just do nothing if no file is selected
