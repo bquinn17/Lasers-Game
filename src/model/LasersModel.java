@@ -29,6 +29,7 @@ public class LasersModel extends Observable {
     private char[][] grid;
     private ArrayList<Integer> nums;
     private ArrayList<Integer> badCoords;
+    private File file;
 
     /**
      * creates a new safe model from the given safe file
@@ -36,8 +37,14 @@ public class LasersModel extends Observable {
      */
     public LasersModel(String filename) {
         File file = new File(filename);
+        this.file = file;
         makeGrid(file, filename);
 
+    }
+    public void setFile(File filename){this.file = file;}
+
+    public void resetGrid(){
+        makeGrid(file, "");
     }
 
     public void makeGrid(File file, String filename){

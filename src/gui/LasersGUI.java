@@ -107,39 +107,23 @@ public class LasersGUI extends Application implements Observer {
      * @param stage the stage to add UI components into
      */
      private void init(Stage stage) {
-        // TODO
         //buttonDemo(stage);  // this can be removed/altered
      }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // TODO
         init(primaryStage);  // do all your UI initialization here
 
-        GridPane grid = new GridPane();
+        GridPane grid = makeButttons();
         //grid.setPadding(new Insets(10, 10, 10, 10));
         //grid.setHgap(0); grid.setVgap(0);
         grid.setAlignment(Pos.CENTER);
-        for (int row = 0; row < this.model.getRows() ; row++) {
-            grid.addColumn(row);
-            for (int col = 0; col < this.model.getColumns(); col++) {
-                Button current = new Button();
-                current.setPadding(new Insets(10,10,10,10));
-                buttonToPic(current, model.getGridAtPos(row,col), false);
-                int finalCol = col;
-                int finalRow = row;
-                current.setOnAction(e -> setLaser(finalRow, finalCol));
-                buttons[row][col] = current;
-                grid.add(current, row, col);
-            }
-        }
 
         Button check = new Button("Check");
         Button hint = new Button("Hint");
         Button solve = new Button("Solve");
         Button restart = new Button("Restart");
         Button load = new Button("Load");
-
 
         check.setOnAction(e -> check());
         hint.setOnAction(e -> hint());
@@ -171,6 +155,24 @@ public class LasersGUI extends Application implements Observer {
         Image schuyler = new Image(getClass().getResourceAsStream("resources/Schuyler.png"));
         primaryStage.getIcons().add((schuyler));
         primaryStage.show();
+    }
+
+    private GridPane makeButttons(){
+        GridPane grid = new GridPane();
+        for (int row = 0; row < this.model.getRows() ; row++) {
+            grid.addColumn(row);
+            for (int col = 0; col < this.model.getColumns(); col++) {
+                Button current = new Button();
+                current.setPadding(new Insets(10,10,10,10));
+                buttonToPic(current, model.getGridAtPos(row,col), false);
+                int finalCol = col;
+                int finalRow = row;
+                current.setOnAction(e -> setLaser(finalRow, finalCol));
+                buttons[row][col] = current;
+                grid.add(current, row, col);
+            }
+        }
+        return grid;
     }
 
     private void buttonToPic(Button button, char ch, boolean isRed){
@@ -221,14 +223,23 @@ public class LasersGUI extends Application implements Observer {
     }
 
     private void load(Stage stage) {
-        restart();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Safe File");
         file = fileChooser.showOpenDialog(stage);
+        model.setFile(file);
+        model.resetGrid();
+        System.out.println(model.getRows() + " " + model.getColumns());
+        //TODO didn't refresh
+        this.buttons = new Button[model.getRows()][model.getColumns()];
+        this.border.setCenter(makeButttons());
+        this.message.setText("");
+        this.refreshView();
     }
 
     private void restart() {
-        //TODO
+        model.resetGrid();
+        this.message.setText("The game was reset");
+        this.refreshView();
     }
 
     private void solve() {
