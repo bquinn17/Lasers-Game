@@ -66,7 +66,7 @@ public class LasersModel extends Observable {
             }
             createGrid(row, col, grid);
             in.close();
-            announceChange();
+            //announceChange();
 
         } catch (FileNotFoundException fnfe){
             System.out.println(filename + " (The system cannot find the file specified)");

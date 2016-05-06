@@ -253,10 +253,10 @@ public class LasersGUI extends Application implements Observer {
             this.message.setText("");
             this.refreshView();
             //TODO resize window.
+            //TODO safe cannot resize to bigger dimensions
+            //http://stackoverflow.com/questions/3391373/dynamic-instant-resize-in-javafx
         }
-        else{
-            model.resetGrid();
-        }
+        //just do nothing if no file is selected
 
     }
 
@@ -275,12 +275,15 @@ public class LasersGUI extends Application implements Observer {
     }
 
     private void check() {
-        model.verify();
-        ArrayList<Integer> coords = model.getBadCoords();
-        System.out.println(coords);
-        if (coords.get(0) >= 0 && coords.get(1) >= 0){
-            //setButtonBackground(buttons[coords.get(0)][coords.get(1)], "red.png");
-            buttonToPic(buttons[coords.get(0)][coords.get(1)], model.getGridAtPos(coords.get(0),coords.get(1)), true);
+        if(model.verify()) {
+            message.setText("The safe is fully verified");
+        }else {
+            ArrayList<Integer> coords = model.getBadCoords();
+            System.out.println(coords);
+            if (coords.get(0) >= 0 && coords.get(1) >= 0) {
+                //setButtonBackground(buttons[coords.get(0)][coords.get(1)], "red.png");
+                buttonToPic(buttons[coords.get(0)][coords.get(1)], model.getGridAtPos(coords.get(0), coords.get(1)), true);
+            }
         }
     }
 
