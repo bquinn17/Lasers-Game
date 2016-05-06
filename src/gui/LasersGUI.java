@@ -226,14 +226,14 @@ public class LasersGUI extends Application implements Observer {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Safe File");
         file = fileChooser.showOpenDialog(stage);
+        //TODO if file is null do nothing
         model.setFile(file);
         model.resetGrid();
-        System.out.println(model.getRows() + " " + model.getColumns());
-        //TODO didn't refresh
         this.buttons = new Button[model.getRows()][model.getColumns()];
         this.border.setCenter(makeButttons());
         this.message.setText("");
         this.refreshView();
+        //TODO resize window.
     }
 
     private void restart() {

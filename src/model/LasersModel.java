@@ -41,7 +41,7 @@ public class LasersModel extends Observable {
         makeGrid(file, filename);
 
     }
-    public void setFile(File filename){this.file = file;}
+    public void setFile(File file){this.file = file;}
 
     public void resetGrid(){
         makeGrid(file, "");
