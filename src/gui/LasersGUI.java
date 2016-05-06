@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import model.LasersModel;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -124,7 +125,7 @@ public class LasersGUI extends Application implements Observer {
             for (int col = 0; col < this.model.getColumns(); col++) {
                 Button current = new Button();
                 current.setPadding(new Insets(10,10,10,10));
-                buttonToPic(current, model.getGridAtPos(row,col));
+                buttonToPic(current, model.getGridAtPos(row,col), false);
                 int finalCol = col;
                 int finalRow = row;
                 current.setOnAction(e -> setLaser(finalRow, finalCol));
@@ -172,7 +173,13 @@ public class LasersGUI extends Application implements Observer {
         primaryStage.show();
     }
 
-    private void buttonToPic(Button button, char ch){
+    private void buttonToPic(Button button, char ch, boolean isRed){
+        if (isRed){
+            setButtonBackground(button, "red.png");
+            System.out.println("schuylerhjhyyhjuu");
+        } else {
+            setButtonBackground(button, "white.png");
+        }
         switch (ch){
             case '0':
                 setButtonBackground(button, "pillar0.png");
@@ -193,10 +200,14 @@ public class LasersGUI extends Application implements Observer {
                 setButtonBackground(button, "pillarX.png");
                 break;
             case '.':
-                setButtonBackground(button, "white.png");
+                if(!isRed) {
+                    setButtonBackground(button, "white.png");
+                }
                 break;
             case 'L':
-                setButtonBackground(button, "yellow.png");
+                if(isRed) setButtonBackground(button, "red.png");
+                else setButtonBackground(button, "yellow.png");
+
                 Image laserImg = new Image(getClass().getResourceAsStream("resources/laser.png"));
                 ImageView laserIcon = new ImageView(laserImg);
                 button.setGraphic(laserIcon);
@@ -214,9 +225,6 @@ public class LasersGUI extends Application implements Observer {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Safe File");
         file = fileChooser.showOpenDialog(stage);
-        //if (file != null) {
-            //return file;
-        //}
     }
 
     private void restart() {
@@ -232,30 +240,30 @@ public class LasersGUI extends Application implements Observer {
     }
 
     private void check() {
-        //TODO
+        model.verify();
+        ArrayList<Integer> coords = model.getBadCoords();
+        System.out.println(coords);
+        if (coords.get(0) >= 0 && coords.get(1) >= 0){
+            //setButtonBackground(buttons[coords.get(0)][coords.get(1)], "red.png");
+            buttonToPic(buttons[coords.get(0)][coords.get(1)], model.getGridAtPos(coords.get(0),coords.get(1)), true);
+        }
     }
 
     private void setLaser(int row, int col) {
-        Button button = buttons[row][col];
         if(model.getGridAtPos(row, col) != 'L') {
             model.addLaser(row, col);
-            setButtonBackground(button, "yellow.png");
-            Image laserImg = new Image(getClass().getResourceAsStream("resources/laser.png"));
-            ImageView laserIcon = new ImageView(laserImg);
-            button.setGraphic(laserIcon);
         }
         else {
             model.removeLaser(row, col);
-            setButtonBackground(button, "white.png");
         }
-
+        refreshView();
     }
 
     private void refreshView() {
         char [][] grid = model.getGrid();
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                buttonToPic(buttons[i][j], grid[i][j]);
+                buttonToPic(buttons[i][j], grid[i][j], false);
             }
 
         }

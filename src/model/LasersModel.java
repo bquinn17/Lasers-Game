@@ -28,6 +28,7 @@ public class LasersModel extends Observable {
 
     private char[][] grid;
     private ArrayList<Integer> nums;
+    private ArrayList<Integer> badCoords;
 
     /**
      * creates a new safe model from the given safe file
@@ -77,6 +78,8 @@ public class LasersModel extends Observable {
         this.grid = grid;
         Integer [] array = new Integer[] {0,1,2,3,4};
         this.nums = new ArrayList<Integer>(Arrays.asList(array));
+        array = new Integer[] {-1,-1};
+        this.badCoords = new ArrayList<Integer>(Arrays.asList(array));
     }
 
     /**
@@ -264,6 +267,8 @@ public class LasersModel extends Observable {
             for (int i = 0; i < columns; i++) {
                 if (grid[j][i] == EMPTY) {
                     message = "Error verifying at : (" + j + " , " + i + ")";
+                    badCoords.set(0,j);
+                    badCoords.set(1,i);
                     announceChange();
                     return false;
                 } else if (is_pillar(grid[j][i])) {
@@ -271,12 +276,16 @@ public class LasersModel extends Observable {
                     rowLasers = 0;
                     if (!check_pillar(grid[j][i], j, i)) {
                         message = "Error verifying at : (" + j + " , " + i + ")";
+                        badCoords.set(0,j);
+                        badCoords.set(1,i);
                         announceChange();
                         return false;
                     }
                 } else if (grid[j][i] == LASER) {
                     if (colLasers.get(i) == 1) {
                         message = "Error verifying at : (" + j + " , " + i + ")";
+                        badCoords.set(0,j);
+                        badCoords.set(1,i);
                         announceChange();
                         return false;
                     }
@@ -284,6 +293,8 @@ public class LasersModel extends Observable {
                     rowLasers++;
                     if (rowLasers > 1) {
                         message = "Error verifying at : (" + j + " , " + i + ")";
+                        badCoords.set(0,j);
+                        badCoords.set(1,i);
                         announceChange();
                         return false;
                     }
@@ -294,6 +305,8 @@ public class LasersModel extends Observable {
             }
             rowLasers = 0;
         }
+        badCoords.set(0,-1);
+        badCoords.set(1,-1);
         return true;
     }
 
@@ -352,6 +365,10 @@ public class LasersModel extends Observable {
      */
     public int getRows() {
         return rows;
+    }
+
+    public ArrayList<Integer> getBadCoords(){
+        return this.badCoords;
     }
 
     public String getMessage() {
