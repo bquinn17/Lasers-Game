@@ -184,22 +184,40 @@ public class LasersGUI extends Application implements Observer {
         }
         switch (ch){
             case '0':
-                setButtonBackground(button, "pillar0.png");
+                Image zeroImg = new Image(getClass().getResourceAsStream("resources/pillar0.png"));
+                ImageView zeroIcon = new ImageView(zeroImg);
+                button.setGraphic(zeroIcon);
+                //setButtonBackground(button, "pillar0.png");
                 break;
             case '1':
-                setButtonBackground(button, "pillar1.png");
+                Image oneImg = new Image(getClass().getResourceAsStream("resources/pillar1.png"));
+                ImageView oneIcon = new ImageView(oneImg);
+                button.setGraphic(oneIcon);
+                //setButtonBackground(button, "pillar1.png");
                 break;
             case '2':
-                setButtonBackground(button, "pillar2.png");
+                Image twoImg = new Image(getClass().getResourceAsStream("resources/pillar2.png"));
+                ImageView twoIcon = new ImageView(twoImg);
+                button.setGraphic(twoIcon);
+                //setButtonBackground(button, "pillar2.png");
                 break;
             case '3':
-                setButtonBackground(button, "pillar3.png");
+                Image threeImg = new Image(getClass().getResourceAsStream("resources/pillar3.png"));
+                ImageView threeIcon = new ImageView(threeImg);
+                button.setGraphic(threeIcon);
+                //setButtonBackground(button, "pillar3.png");
                 break;
             case '4':
-                setButtonBackground(button, "pillar4.png");
+                Image fourImg = new Image(getClass().getResourceAsStream("resources/pillar4.png"));
+                ImageView fourIcon = new ImageView(fourImg);
+                button.setGraphic(fourIcon);
+                //setButtonBackground(button, "pillar4.png");
                 break;
             case 'X':
-                setButtonBackground(button, "pillarX.png");
+                Image xImg = new Image(getClass().getResourceAsStream("resources/pillarX.png"));
+                ImageView xIcon = new ImageView(xImg);
+                button.setGraphic(xIcon);
+                //setButtonBackground(button, "pillarX.png");
                 break;
             case '.':
                 if(!isRed) {
@@ -225,15 +243,21 @@ public class LasersGUI extends Application implements Observer {
     private void load(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Safe File");
-        file = fileChooser.showOpenDialog(stage);
-        //TODO if file is null do nothing
-        model.setFile(file);
-        model.resetGrid();
-        this.buttons = new Button[model.getRows()][model.getColumns()];
-        this.border.setCenter(makeButttons());
-        this.message.setText("");
-        this.refreshView();
-        //TODO resize window.
+        File testfile = fileChooser.showOpenDialog(stage);
+        if (testfile != null) {
+            file = testfile;
+            model.setFile(file);
+            model.resetGrid();
+            this.buttons = new Button[model.getRows()][model.getColumns()];
+            this.border.setCenter(makeButttons());
+            this.message.setText("");
+            this.refreshView();
+            //TODO resize window.
+        }
+        else{
+            model.resetGrid();
+        }
+
     }
 
     private void restart() {
