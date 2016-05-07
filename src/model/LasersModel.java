@@ -66,7 +66,6 @@ public class LasersModel extends Observable {
             }
             createGrid(row, col, grid);
             in.close();
-            announceChange();
 
         } catch (FileNotFoundException fnfe){
             System.out.println(filename + " (The system cannot find the file specified)");
@@ -273,36 +272,24 @@ public class LasersModel extends Observable {
         for (int j = 0; j < rows; j++) {
             for (int i = 0; i < columns; i++) {
                 if (grid[j][i] == EMPTY) {
-                    message = "Error verifying at : (" + j + " , " + i + ")";
-                    badCoords.set(0,j);
-                    badCoords.set(1,i);
-                    announceChange();
+                    badLasers(j,i);
                     return false;
                 } else if (is_pillar(grid[j][i])) {
                     colLasers.set(i, 0);
                     rowLasers = 0;
                     if (!check_pillar(grid[j][i], j, i)) {
-                        message = "Error verifying at : (" + j + " , " + i + ")";
-                        badCoords.set(0,j);
-                        badCoords.set(1,i);
-                        announceChange();
+                        badLasers(j,i);
                         return false;
                     }
                 } else if (grid[j][i] == LASER) {
                     if (colLasers.get(i) == 1) {
-                        message = "Error verifying at : (" + j + " , " + i + ")";
-                        badCoords.set(0,j);
-                        badCoords.set(1,i);
-                        announceChange();
+                        badLasers(j,i);
                         return false;
                     }
                     colLasers.set(i, 1);
                     rowLasers++;
                     if (rowLasers > 1) {
-                        message = "Error verifying at : (" + j + " , " + i + ")";
-                        badCoords.set(0,j);
-                        badCoords.set(1,i);
-                        announceChange();
+                        badLasers(j,i);
                         return false;
                     }
                 } else if (grid[j][i] == PILLAR) {
@@ -315,6 +302,13 @@ public class LasersModel extends Observable {
         badCoords.set(0,-1);
         badCoords.set(1,-1);
         return true;
+    }
+
+    private void badLasers(int j, int i){
+        message = "Error verifying at : (" + j + " , " + i + ")";
+        badCoords.set(0,j);
+        badCoords.set(1,i);
+        announceChange();
     }
 
     /**

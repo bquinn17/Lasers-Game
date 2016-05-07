@@ -45,6 +45,7 @@ public class LasersGUI extends Application implements Observer {
         // here and then the model is created.
         Parameters params = getParameters();
         String filename = params.getRaw().get(0);
+        this.file = new File(filename);
         this.model = new LasersModel(filename);
         this.model.addObserver(this);
         border = new BorderPane();
@@ -137,7 +138,7 @@ public class LasersGUI extends Application implements Observer {
         bottom.setAlignment(Pos.CENTER);
         bottom.setPadding(new Insets(10,10,10,10));
 
-        message = new Label("");
+        message = new Label(file.getName() + " was loaded");
         message.setTextAlignment(TextAlignment.CENTER);
         HBox top = new HBox();
         top.getChildren().add(message);
@@ -151,7 +152,7 @@ public class LasersGUI extends Application implements Observer {
         Scene scene = new Scene(border);
         primaryStage.setTitle("Lasers");
         primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         Image schuyler = new Image(getClass().getResourceAsStream("resources/Schuyler.png"));
         primaryStage.getIcons().add((schuyler));
         primaryStage.show();
@@ -178,7 +179,6 @@ public class LasersGUI extends Application implements Observer {
     private void buttonToPic(Button button, char ch, boolean isRed){
         if (isRed){
             setButtonBackground(button, "red.png");
-            System.out.println("schuylerhjhyyhjuu");
         } else {
             setButtonBackground(button, "white.png");
         }
@@ -250,10 +250,13 @@ public class LasersGUI extends Application implements Observer {
             model.resetGrid();
             this.buttons = new Button[model.getRows()][model.getColumns()];
             this.border.setCenter(makeButttons());
-            this.message.setText("");
+            this.message.setText(testfile.getName() + " was loaded");
             this.refreshView();
             //TODO resize window.
             //http://stackoverflow.com/questions/3391373/dynamic-instant-resize-in-javafx
+        } else {
+            this.message.setText("No file was loaded");
+            this.refreshView();
         }
         //just do nothing if no file is selected
 
@@ -278,9 +281,7 @@ public class LasersGUI extends Application implements Observer {
             message.setText("The safe is fully verified");
         }else {
             ArrayList<Integer> coords = model.getBadCoords();
-            System.out.println(coords);
             if (coords.get(0) >= 0 && coords.get(1) >= 0) {
-                //setButtonBackground(buttons[coords.get(0)][coords.get(1)], "red.png");
                 buttonToPic(buttons[coords.get(1)][coords.get(0)], model.getGridAtPos(coords.get(1), coords.get(0)), true);
             }
         }
