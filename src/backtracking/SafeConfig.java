@@ -20,10 +20,18 @@ import model.LasersModel;
 public class SafeConfig implements Configuration {
 
     private LasersModel model;
+    private char[][] grid;
+    private ArrayList<Pillar> pillars;
 
     public SafeConfig(String filename) {
         this.model = new LasersModel(filename);
-        // TODO
+        this.grid = model.getGrid();
+        pillars = new ArrayList<>();
+        getPillars();
+        this.pillars.sort((pillar1, pillar2) -> pillar1.getNumber() - pillar2.getNumber());
+        for(Pillar pillar : pillars){
+            System.out.println(pillar.getNumber());
+        }
     }
 
     @Override
@@ -46,5 +54,27 @@ public class SafeConfig implements Configuration {
     @Override
     public boolean isGoal() {
         return model.verify();
+    }
+
+    private boolean isInt(char num){
+        try{
+            Integer.parseInt(String.valueOf(num));
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
+
+    private void getPillars(){
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (isInt(grid[i][j])){
+                    int number = Integer.parseInt(String.valueOf(grid[i][j]));
+                    Pillar pillar = new Pillar(i,j,number);
+                    this.pillars.add(pillar);
+                }
+            }
+
+        }
     }
 }

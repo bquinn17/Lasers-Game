@@ -69,6 +69,7 @@ public class LasersModel extends Observable {
 
         } catch (FileNotFoundException fnfe){
             System.out.println(filename + " (The system cannot find the file specified)");
+            System.exit(2);
         }
     }
 
@@ -328,7 +329,7 @@ public class LasersModel extends Observable {
 
 
     /**
-     * Sees if each piller has the correct amount of lasers
+     * Sees if each Pillar has the correct amount of lasers
      * @param ch number of lasers it should have
      * @param j row of pillar to check
      * @param i column of pillar to check
