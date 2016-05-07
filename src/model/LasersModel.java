@@ -318,7 +318,7 @@ public class LasersModel extends Observable {
      * @param ch the character a certain position
      * @return whether or not it is a pillar
      */
-    private boolean is_pillar(char ch){
+    public boolean is_pillar(char ch){
         String str = String.valueOf(ch);
         try {
             nums.contains(Integer.parseInt(str));

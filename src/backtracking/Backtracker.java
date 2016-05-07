@@ -55,22 +55,24 @@ public class Backtracker {
      */
     public Optional<Configuration> solve(Configuration config) {
         debugPrint("Current config", config);
-        if (config.isGoal()) {
-            debugPrint("\tGoal config", config);
-            return Optional.of(config);
-        } else {
-            for (Configuration child : config.getSuccessors()) {
-                if (child.isValid()) {
-                    debugPrint("\tValid successor", child);
-                    Optional<Configuration> sol = solve(child);
-                    if (sol.isPresent()) {
-                        return sol;
+        if(!config.getIsRip()){
+            if (config.isGoal()) {
+                debugPrint("\tGoal config", config);
+                return Optional.of(config);
+            } else {
+                for (Configuration child : config.getSuccessors()) {
+                    if (child.isValid()) {
+                        debugPrint("\tValid successor", child);
+                        Optional<Configuration> sol = solve(child);
+                        if (sol.isPresent()) {
+                            return sol;
+                        }
+                    } else {
+                        debugPrint("\tInvalid successor", child);
                     }
-                } else {
-                    debugPrint("\tInvalid successor", child);
                 }
+                // implicit backtracking happens here
             }
-            // implicit backtracking happens here
         }
         return Optional.empty();
     }

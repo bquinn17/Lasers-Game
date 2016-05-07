@@ -22,6 +22,7 @@ public class SafeConfig implements Configuration {
     private LasersModel model;
     private char[][] grid;
     private ArrayList<Pillar> pillars;
+    private boolean isRip;
 
     public SafeConfig(String filename) {
         this.model = new LasersModel(filename);
@@ -29,9 +30,10 @@ public class SafeConfig implements Configuration {
         pillars = new ArrayList<>();
         getPillars();
         this.pillars.sort((pillar1, pillar2) -> pillar1.getNumber() - pillar2.getNumber());
-        for(Pillar pillar : pillars){
-            System.out.println(pillar.getNumber());
-        }
+        this.isRip = false;
+        solveFours();
+        this.grid = model.getGrid();
+        System.out.println(model);
     }
 
     @Override
@@ -56,19 +58,43 @@ public class SafeConfig implements Configuration {
         return model.verify();
     }
 
-    private boolean isInt(char num){
-        try{
-            Integer.parseInt(String.valueOf(num));
-            return true;
-        } catch (NumberFormatException ex) {
-            return false;
+    public boolean getIsRip(){
+        return this.isRip;
+    }
+
+    private void solveFours(){
+        int count = 0;
+        for (int i = 1; this.pillars.get(pillars.size() - i).getNumber() == 4; i++){
+            int[]coords = pillars.get(pillars.size() - i).getCoords();
+            pillars.remove(pillars.size() - i);
+            int row = coords[0]; int col = coords[1];
+            System.out.println(coords[0] + " , "+ coords[1]);
+            if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
+                System.out.println("test");
+                model.addLaser(row+1,col);
+                count++;
+            } if(row - 1 > 0 && model.getGridAtPos(row-1,col) == '.'){
+                model.addLaser(row - 1,col);
+                count++;
+            } if(col - 1 > 0 && model.getGridAtPos(row,col-1) == '.'){
+                model.addLaser(row,col - 1);
+                count++;
+            } if(col + 1 < model.getColumns() && model.getGridAtPos(row,col+1) == '.'){
+                model.addLaser(row,col + 1);
+                count++;
+            }
+            if(count < 4){
+                this.isRip = true;
+                break;
+            }
+            count = 0;
         }
     }
 
     private void getPillars(){
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                if (isInt(grid[i][j])){
+                if (model.is_pillar(grid[i][j])){
                     int number = Integer.parseInt(String.valueOf(grid[i][j]));
                     Pillar pillar = new Pillar(i,j,number);
                     this.pillars.add(pillar);

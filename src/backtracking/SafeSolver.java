@@ -36,6 +36,7 @@ public class SafeSolver {
                 System.out.println("Solution:\n" + sol.get());
             } else {
                 System.out.println("No solution!");
-            }        }
+            }
+        }
     }
 }
