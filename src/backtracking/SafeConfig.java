@@ -1,7 +1,9 @@
 package backtracking;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import model.LasersModel;
 /**
  * The class represents a single configuration of a safe.  It is
  * used by the backtracker to generate successors, check for
@@ -17,7 +19,10 @@ import java.util.Collection;
  * */
 public class SafeConfig implements Configuration {
 
+    private LasersModel model;
+
     public SafeConfig(String filename) {
+        this.model = new LasersModel(filename);
         // TODO
     }
 
@@ -29,13 +34,17 @@ public class SafeConfig implements Configuration {
 
     @Override
     public boolean isValid() {
-        // TODO
-        return false;
+        if(!model.verify()) {
+            ArrayList<Integer> coords = model.getBadCoords();
+            if (model.getGridAtPos(coords.get(0), coords.get(1)) == '.') {
+                // TODO
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean isGoal() {
-        // TODO
-        return false;
+        return model.verify();
     }
 }

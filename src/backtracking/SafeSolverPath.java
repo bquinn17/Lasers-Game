@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
- * Thie is the main class for a safe solver with a path.  It runs the
+ * This is the main class for a safe solver with a path.  It runs the
  * backtracking algorithm and displays the full path of the solution,
  * step by step, if one exists.
  *

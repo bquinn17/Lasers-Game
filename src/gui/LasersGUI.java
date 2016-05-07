@@ -1,6 +1,8 @@
 package gui;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -150,6 +152,11 @@ public class LasersGUI extends Application implements Observer {
         border.setCenter(grid);
 
         Scene scene = new Scene(border);
+
+        scene.widthProperty().addListener((observable, oldValue, newValue) -> grid.setPrefWidth((Double)newValue));
+
+        scene.heightProperty().addListener((observable, oldValue, newValue) -> grid.setPrefHeight((Double)newValue));
+
         primaryStage.setTitle("Lasers");
         primaryStage.setScene(scene);
         primaryStage.setResizable(true);
@@ -248,7 +255,7 @@ public class LasersGUI extends Application implements Observer {
             file = testfile;
             model.setFile(file);
             model.resetGrid();
-            this.buttons = new Button[model.getRows()][model.getColumns()];
+            this.buttons = new Button[model.getColumns()][model.getRows()];
             this.border.setCenter(makeButttons());
             this.message.setText(testfile.getName() + " was loaded");
             this.refreshView();
@@ -288,7 +295,7 @@ public class LasersGUI extends Application implements Observer {
     }
 
     private void setLaser(int row, int col) {
-        if(model.getGridAtPos1(col, row) != 'L') {
+        if(model.getGridAtPosFlipped(col, row) != 'L') {
             model.addLaser(col, row);
         }
         else {

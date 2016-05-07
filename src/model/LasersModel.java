@@ -380,7 +380,7 @@ public class LasersModel extends Observable {
         return grid[col][row];
     }
 
-    public char getGridAtPos1(int row, int col) {
+    public char getGridAtPosFlipped(int row, int col) {
         return grid[row][col];
     }
 
