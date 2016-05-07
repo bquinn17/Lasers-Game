@@ -48,7 +48,7 @@ public class LasersGUI extends Application implements Observer {
         this.model = new LasersModel(filename);
         this.model.addObserver(this);
         border = new BorderPane();
-        buttons = new Button[model.getRows()][model.getColumns()];
+        buttons = new Button[model.getColumns()][model.getRows()];
         status = true;
     }
 
@@ -160,16 +160,16 @@ public class LasersGUI extends Application implements Observer {
     private GridPane makeButttons(){
         GridPane grid = new GridPane();
         for (int row = 0; row < this.model.getRows() ; row++) {
-            grid.addColumn(row);
+            //grid.addColumn(row);
             for (int col = 0; col < this.model.getColumns(); col++) {
                 Button current = new Button();
                 current.setPadding(new Insets(10,10,10,10));
-                buttonToPic(current, model.getGridAtPos(row,col), false);
+                buttonToPic(current, model.getGridAtPos(col,row), false);
                 int finalCol = col;
                 int finalRow = row;
-                current.setOnAction(e -> setLaser(finalRow, finalCol));
-                buttons[row][col] = current;
-                grid.add(current, row, col);
+                current.setOnAction(e -> setLaser(finalCol, finalRow));
+                buttons[col][row] = current;
+                grid.add(current, col, row);
             }
         }
         return grid;
@@ -281,26 +281,26 @@ public class LasersGUI extends Application implements Observer {
             System.out.println(coords);
             if (coords.get(0) >= 0 && coords.get(1) >= 0) {
                 //setButtonBackground(buttons[coords.get(0)][coords.get(1)], "red.png");
-                buttonToPic(buttons[coords.get(0)][coords.get(1)], model.getGridAtPos(coords.get(0), coords.get(1)), true);
+                buttonToPic(buttons[coords.get(1)][coords.get(0)], model.getGridAtPos(coords.get(1), coords.get(0)), true);
             }
         }
     }
 
     private void setLaser(int row, int col) {
-        if(model.getGridAtPos(row, col) != 'L') {
-            model.addLaser(row, col);
+        if(model.getGridAtPos1(col, row) != 'L') {
+            model.addLaser(col, row);
         }
         else {
-            model.removeLaser(row, col);
+            model.removeLaser(col, row);
         }
         refreshView();
     }
 
     private void refreshView() {
         char [][] grid = model.getGrid();
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                buttonToPic(buttons[i][j], grid[i][j], false);
+        for (int i = 0; i < model.getRows(); i++) {
+            for (int j = 0; j < model.getColumns(); j++) {
+                buttonToPic(buttons[j][i], grid[i][j], false);
             }
 
         }

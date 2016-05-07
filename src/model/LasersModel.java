@@ -66,7 +66,7 @@ public class LasersModel extends Observable {
             }
             createGrid(row, col, grid);
             in.close();
-            //announceChange();
+            announceChange();
 
         } catch (FileNotFoundException fnfe){
             System.out.println(filename + " (The system cannot find the file specified)");
@@ -383,6 +383,10 @@ public class LasersModel extends Observable {
     }
 
     public char getGridAtPos(int row, int col) {
+        return grid[col][row];
+    }
+
+    public char getGridAtPos1(int row, int col) {
         return grid[row][col];
     }
 
