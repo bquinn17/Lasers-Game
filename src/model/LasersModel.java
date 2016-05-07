@@ -38,6 +38,7 @@ public class LasersModel extends Observable {
     public LasersModel(String filename) {
         File file = new File(filename);
         this.file = file;
+
         makeGrid(file, filename);
 
     }
