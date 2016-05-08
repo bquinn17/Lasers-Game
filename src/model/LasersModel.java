@@ -23,9 +23,7 @@ public class LasersModel extends Observable {
 
     private int rows;
     private int columns;
-
     private String message;
-
     private char[][] grid;
     private ArrayList<Integer> nums;
     private ArrayList<Integer> badCoords;
@@ -42,6 +40,21 @@ public class LasersModel extends Observable {
         makeGrid(file, filename);
 
     }
+
+    public LasersModel(LasersModel model){
+        this.rows = model.rows;
+        this.columns = model.columns;
+        this.message = model.message;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                this.grid[i][j] = model.grid[i][j];
+            }
+        }
+        this.nums = new ArrayList<>(model.nums);
+        this.badCoords = new ArrayList<>(model.badCoords);
+        this.file = model.file;
+    }
+
     public void setFile(File file){this.file = file;}
 
     public void resetGrid(){

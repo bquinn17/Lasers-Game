@@ -1,9 +1,9 @@
 package backtracking;
 
+import model.LasersModel;
+
 import java.util.ArrayList;
 import java.util.Collection;
-
-import model.LasersModel;
 /**
  * The class represents a single configuration of a safe.  It is
  * used by the backtracker to generate successors, check for
@@ -36,19 +36,45 @@ public class SafeConfig implements Configuration {
         System.out.println(model);
     }
 
+    private SafeConfig(SafeConfig config){
+        this.model = new LasersModel(config.model);
+        this.grid = this.model.getGrid();
+        this.pillars = config.pillars;
+        this.isRip = config.isRip;
+    }
+
     @Override
     public Collection<Configuration> getSuccessors() {
+        ArrayList<Configuration> successors = new ArrayList<>();
         // TODO
-        return null;
+
+        if(pillars.size() != 0){
+            Pillar pillar = pillars.get(pillars.size() - 1);
+
+        } else {
+            //TODO fill in the rest of the laser (niave)
+        }
+
+        return successors;
     }
 
     @Override
     public boolean isValid() {
         if(!model.verify()) {
-            ArrayList<Integer> coords = model.getBadCoords();
-            if (model.getGridAtPos(coords.get(0), coords.get(1)) == '.') {
-                // TODO
+            for (int i = 0; pillars.get(i).getNumber() == 0; i++) {
+                int[]coords = pillars.get(pillars.size() - i).getCoords();
+                int row = coords[0]; int col = coords[1];
+                if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == 'L'){
+                    return false;
+                } if(row - 1 > 0 && model.getGridAtPos(row-1,col) == 'L'){
+                    return false;
+                } if(col - 1 > 0 && model.getGridAtPos(row,col-1) == 'L'){
+                    return false;
+                } if(col + 1 < model.getColumns() && model.getGridAtPos(row,col+1) == 'L'){
+                    return false;
+                }
             }
+            // TODO
         }
         return true;
     }
@@ -70,7 +96,6 @@ public class SafeConfig implements Configuration {
             int row = coords[0]; int col = coords[1];
             System.out.println(coords[0] + " , "+ coords[1]);
             if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
-                System.out.println("test");
                 model.addLaser(row+1,col);
                 count++;
             } if(row - 1 > 0 && model.getGridAtPos(row-1,col) == '.'){
