@@ -53,7 +53,7 @@ public class SafeConfig implements Configuration {
             if (count < pillar.getNumber()){
                 return successors; //not enough spots for lasers, invalid successor
             } else if (count == pillar.getNumber()){
-                //TODO add lasers
+                fillLasers(pillar);
                 successors.add(this);
                 return successors;
             } else {
@@ -68,8 +68,7 @@ public class SafeConfig implements Configuration {
 
     private int countAround(Pillar pillar) {
         //TODO
-        int[]coords = pillars.get(pillars.size() - i).getCoords();
-        pillars.remove(pillars.size() - i);
+        int[]coords = pillar.getCoords();
         int row = coords[0]; int col = coords[1];
         int count = 0;
         if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
@@ -82,6 +81,52 @@ public class SafeConfig implements Configuration {
             if (model.addLaser(row,col + 1)) { count++; }
         }
         return count;
+    }
+
+    private int fillLasers(Pillar pillar){
+        int count = pillar.getNumber();
+        int[]coords = pillars.get(pillars.size() - 1).getCoords();
+        pillars.remove(pillars.size() - 1);
+        int row = coords[0]; int col = coords[1];
+        if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
+            if(model.addLaser(row+1,col)){ count--; }
+        }
+        if(row - 1 > 0 && model.getGridAtPos(row-1,col) == '.'){
+            if (count > 0 && model.addLaser(row - 1,col)) {  count--; }
+        }
+        if(col - 1 > 0 && model.getGridAtPos(row,col-1) == '.' && count > 0){
+            if (model.addLaser(row,col - 1)) { count--; }
+        }
+        if(col + 1 < model.getColumns() && model.getGridAtPos(row,col+1) == '.' && count > 0){
+            if (model.addLaser(row,col + 1)) { count--; }
+        }
+        if(count < 4){
+            this.isRip = true;
+        }
+        return count;
+    }
+
+    private void solveFours(){
+        int count = 0;
+        while (this.pillars.get(pillars.size() - 1).getNumber() == 4){
+            int[]coords = pillars.get(pillars.size() - 1).getCoords();
+            pillars.remove(pillars.size() - 1);
+            int row = coords[0]; int col = coords[1];
+            if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
+                if(model.addLaser(row+1,col)){ count++; }
+            } if(row - 1 > 0 && model.getGridAtPos(row-1,col) == '.'){
+                if (model.addLaser(row - 1,col)) { count++; }
+            } if(col - 1 > 0 && model.getGridAtPos(row,col-1) == '.'){
+                if (model.addLaser(row,col - 1)) { count++; }
+            } if(col + 1 < model.getColumns() && model.getGridAtPos(row,col+1) == '.'){
+                if (model.addLaser(row,col + 1)) { count++; }
+            }
+            if(count < 4){
+                this.isRip = true;
+                break;
+            }
+            count = 0;
+        }
     }
 
     @Override
@@ -118,29 +163,6 @@ public class SafeConfig implements Configuration {
         return model.getGrid();
     }
 
-    private void solveFours(){
-        int count = 0;
-        for (int i = 1; this.pillars.get(pillars.size() - i).getNumber() == 4; i++){
-            int[]coords = pillars.get(pillars.size() - i).getCoords();
-            pillars.remove(pillars.size() - i);
-            int row = coords[0]; int col = coords[1];
-            System.out.println(coords[0] + " , "+ coords[1]);
-            if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
-                if(model.addLaser(row+1,col)){ count++; }
-            } if(row - 1 > 0 && model.getGridAtPos(row-1,col) == '.'){
-                if (model.addLaser(row - 1,col)) { count++; }
-            } if(col - 1 > 0 && model.getGridAtPos(row,col-1) == '.'){
-                if (model.addLaser(row,col - 1)) { count++; }
-            } if(col + 1 < model.getColumns() && model.getGridAtPos(row,col+1) == '.'){
-                if (model.addLaser(row,col + 1)) { count++; }
-            }
-            if(count < 4){
-                this.isRip = true;
-                break;
-            }
-            count = 0;
-        }
-    }
 
     private void getPillars(){
         for (int i = 0; i < grid.length; i++) {

@@ -40,7 +40,7 @@ public class LasersGUI extends Application implements Observer {
     private Button[][] buttons;
     private Label message;
     private File file;
-    private SafeConfig winningConfig;
+    private char[][] winningConfig;
 
 
     @Override
@@ -114,7 +114,9 @@ public class LasersGUI extends Application implements Observer {
      * @param stage the stage to add UI components into
      */
      private void init(Stage stage) {
-        //buttonDemo(stage);  // this can be removed/altered
+         //TODO add threading
+         Backtracker solver = new Backtracker(file.getName());
+         this.winningConfig = solver.getGrid();
      }
 
     @Override
@@ -280,8 +282,7 @@ public class LasersGUI extends Application implements Observer {
     }
 
     private void solve() {
-        Backtracker solver = new Backtracker(file.getName());
-        this.model.setGrid(solver.getGrid());
+        this.model.setGrid(winningConfig);
         this.refreshView();
     }
 
