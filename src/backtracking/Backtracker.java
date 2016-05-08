@@ -21,6 +21,7 @@ import java.util.Optional;
 public class Backtracker {
 
     private boolean debug;
+    private SafeConfig config;
 
     /**
      * Initialize a new backtracker.
@@ -32,6 +33,15 @@ public class Backtracker {
         if (this.debug) {
             System.out.println("Backtracker debugging enabled...");
         }
+    }
+
+    public Backtracker(String filename){
+        config = new SafeConfig(filename);
+        this.solve(config);
+    }
+
+    public char[][] getGrid(){
+        return config.getGrid();
     }
 
     /**

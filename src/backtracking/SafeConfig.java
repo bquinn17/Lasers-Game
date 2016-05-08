@@ -47,10 +47,18 @@ public class SafeConfig implements Configuration {
     public Collection<Configuration> getSuccessors() {
         ArrayList<Configuration> successors = new ArrayList<>();
         // TODO
-
         if(pillars.size() != 0){
             Pillar pillar = pillars.get(pillars.size() - 1);
-
+            int count = countAround(pillar);
+            if (count < pillar.getNumber()){
+                return successors; //not enough spots for lasers, invalid successor
+            } else if (count == pillar.getNumber()){
+                //TODO add lasers
+                successors.add(this);
+                return successors;
+            } else {
+                //TODO generate multiple children
+            }
         } else {
             //TODO fill in the rest of the laser (niave)
         }
@@ -58,9 +66,27 @@ public class SafeConfig implements Configuration {
         return successors;
     }
 
+    private int countAround(Pillar pillar) {
+        //TODO
+        int[]coords = pillars.get(pillars.size() - i).getCoords();
+        pillars.remove(pillars.size() - i);
+        int row = coords[0]; int col = coords[1];
+        int count = 0;
+        if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
+            if(model.addLaser(row+1,col)){ count++; }
+        } if(row - 1 > 0 && model.getGridAtPos(row-1,col) == '.'){
+            if (model.addLaser(row - 1,col)) { count++; }
+        } if(col - 1 > 0 && model.getGridAtPos(row,col-1) == '.'){
+            if (model.addLaser(row,col - 1)) { count++; }
+        } if(col + 1 < model.getColumns() && model.getGridAtPos(row,col+1) == '.'){
+            if (model.addLaser(row,col + 1)) { count++; }
+        }
+        return count;
+    }
+
     @Override
     public boolean isValid() {
-        if(!model.verify()) {
+        if(!model.verify() && pillars.size() > 0) {
             for (int i = 0; pillars.get(i).getNumber() == 0; i++) {
                 int[]coords = pillars.get(pillars.size() - i).getCoords();
                 int row = coords[0]; int col = coords[1];
@@ -88,6 +114,10 @@ public class SafeConfig implements Configuration {
         return this.isRip;
     }
 
+    public char[][] getGrid(){
+        return model.getGrid();
+    }
+
     private void solveFours(){
         int count = 0;
         for (int i = 1; this.pillars.get(pillars.size() - i).getNumber() == 4; i++){
@@ -96,17 +126,13 @@ public class SafeConfig implements Configuration {
             int row = coords[0]; int col = coords[1];
             System.out.println(coords[0] + " , "+ coords[1]);
             if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
-                model.addLaser(row+1,col);
-                count++;
+                if(model.addLaser(row+1,col)){ count++; }
             } if(row - 1 > 0 && model.getGridAtPos(row-1,col) == '.'){
-                model.addLaser(row - 1,col);
-                count++;
+                if (model.addLaser(row - 1,col)) { count++; }
             } if(col - 1 > 0 && model.getGridAtPos(row,col-1) == '.'){
-                model.addLaser(row,col - 1);
-                count++;
+                if (model.addLaser(row,col - 1)) { count++; }
             } if(col + 1 < model.getColumns() && model.getGridAtPos(row,col+1) == '.'){
-                model.addLaser(row,col + 1);
-                count++;
+                if (model.addLaser(row,col + 1)) { count++; }
             }
             if(count < 4){
                 this.isRip = true;

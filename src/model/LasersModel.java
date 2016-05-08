@@ -36,9 +36,7 @@ public class LasersModel extends Observable {
     public LasersModel(String filename) {
         File file = new File(filename);
         this.file = file;
-
         makeGrid(file, filename);
-
     }
 
     public LasersModel(LasersModel model){
@@ -56,6 +54,10 @@ public class LasersModel extends Observable {
     }
 
     public void setFile(File file){this.file = file;}
+
+    public void setGrid(char[][] grid){
+        this.grid = grid;
+    }
 
     public void resetGrid(){
         makeGrid(file, "");
@@ -109,11 +111,11 @@ public class LasersModel extends Observable {
      * @param row number of rows in the safe
      * @param col number of columns in the safe
      */
-    public void addLaser(int row, int col){
+    public boolean addLaser(int row, int col){
         if (row >= rows || row < 0 || col >= columns || col < 0){
             message = "Error adding laser at: ("+ row +", "+ col +")";
             announceChange();
-            return;
+            return false;
         }
         if(grid[row][col] == EMPTY || grid[row][col] == BEAM){
             grid[row][col] = LASER;
@@ -139,11 +141,12 @@ public class LasersModel extends Observable {
             }
             message = "Laser added at: ("+ row +", "+ col +")";
             announceChange();
-
+            return true;
         }
         else{
             message = "Error adding laser at: ("+ row +", "+ col +")";
             announceChange();
+            return false;
         }
     }
 
