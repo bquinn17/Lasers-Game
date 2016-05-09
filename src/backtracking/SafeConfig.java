@@ -23,6 +23,8 @@ public class SafeConfig implements Configuration {
     private char[][] grid;
     private ArrayList<Pillar> pillars;
     private boolean isRip;
+    private int currRow;
+    private int currCol;
 
     public SafeConfig(String filename) {
         this.model = new LasersModel(filename);
@@ -33,6 +35,8 @@ public class SafeConfig implements Configuration {
         this.isRip = false;
         solveFours();
         this.grid = model.getGrid();
+        currCol = 0;
+        currRow = 0;
     }
 
     private SafeConfig(SafeConfig config){
@@ -40,12 +44,15 @@ public class SafeConfig implements Configuration {
         this.grid = this.model.getGrid();
         this.pillars = config.pillars;
         this.isRip = config.isRip;
+        this.currCol = config.currCol;
+        this.currRow = config.currRow;
     }
 
     @Override
     public Collection<Configuration> getSuccessors() {
         ArrayList<Configuration> successors = new ArrayList<>();
-        if(pillars.size() != 0 && pillars.get(pillars.size()-1).getNumber() != 0){
+        if(pillars.size() != 0 && pillars.get(pillars.size()-1).getNumber() != 0){ //if there are still non 0 pillars
+            //left in the list of pillars...
             Pillar pillar = pillars.get(pillars.size() - 1);
             pillars.remove(pillars.size()-1);
             int count = countAround(pillar);
@@ -64,34 +71,42 @@ public class SafeConfig implements Configuration {
                 successors.addAll(children);
                 return successors; //all possibilities of laser placement for given pillar
             }
-        } else {
-            model.verify();
-            int row = model.getBadCoords().get(0);
-            int col = model.getBadCoords().get(1);
-            if(model.getGridAtPos(row,col) != '.'){ //If verify does not break on white space, this config is invalid
-                return successors;
+        } else { //begin naive approach
+
+            while (model.getGridAtPos(currRow,currRow) != '.'){ //step forward until the next open spot
+                stepForward();
             }
             //If the white space is next to a numbered pillar, this that pillar is already full
-            if (row + 1 < model.getRows() && model.is_pillar(model.getGridAtPos(row + 1, col))) {
+            if (currRow + 1 < model.getRows() && model.is_pillar(model.getGridAtPos(currRow + 1, currRow))) {
                 successors.add(this);
                 return successors;
             }
-            if (row - 1 > 0 && model.is_pillar(model.getGridAtPos(row + 1, col))) {
+            if (currRow - 1 > 0 && model.is_pillar(model.getGridAtPos(currRow + 1, currRow))) {
                 successors.add(this);
                 return successors;
             }
-            if (col + 1 < model.getColumns() && model.is_pillar(model.getGridAtPos(row + 1, col))) {
+            if (currRow + 1 < model.getColumns() && model.is_pillar(model.getGridAtPos(currRow + 1, currRow))) {
                 successors.add(this);
                 return successors;
             }
-            if (col - 1 > 0 && model.is_pillar(model.getGridAtPos(row + 1, col))) {
+            if (currRow - 1 > 0 && model.is_pillar(model.getGridAtPos(currRow + 1, currRow))) {
                 successors.add(this);
                 return successors;
             }
+            //return two children, one with a laser added in the spot, one without
             SafeConfig kid = new SafeConfig(this);
             successors.add(kid);
             successors.add(this);
+            stepForward(); //move forward one spot
             return successors;
+        }
+    }
+
+    private void stepForward(){
+        this.currRow++;
+        if(this.currRow == model.getRows()){
+            currRow = 0;
+            currCol++;
         }
     }
 
@@ -117,16 +132,32 @@ public class SafeConfig implements Configuration {
             int[] good = {row,col-1};
             canAdd.add(good);
         }
+        int i;
+        int index = 0;
         int number = pillar.getNumber();
+        if(number == 2){ //if the number is two start by making lasers on every other spot
+            while(index+2 < canAdd.size()){
+                SafeConfig kid = new SafeConfig(this); //create a new configuration using the copy constructor
+                i = 0;
+                while (i < number){ //puts a laser in the first n positions
+                    kid.model.addLaser(canAdd.get(i)[0],canAdd.get(i)[1]);
+                    i+=2;
+                }
+                index++;
+            }
+        }
+        index = 0;
         ArrayList<Configuration> kids = new ArrayList<>(); //full list of successors
         while (canAdd.size() >= number){ //adds n number of lasers each time, then removes the front position
             SafeConfig kid = new SafeConfig(this); //create a new configuration using the copy constructor
-            int i = 0;
-            while (i < number){ //puts a laser in the first n positions
-                kid.model.addLaser(canAdd.get(i)[0],canAdd.get(i)[1]);
+            i = index;
+            while (i < number + index){ //puts a laser in the next n positions
+                kid.model.addLaser(canAdd.get(index+i)[0],canAdd.get(index+i)[1]);
                 i++;
+                if(i == canAdd.size()) i = 0;
             }
-            canAdd.remove(0); //removes the first coordinate in order to step forward one in the coordinate list
+            index++;
+            //canAdd.remove(0); //removes the first coordinate in order to step forward one in the coordinate list
             kids.add(kid); //adds to the list of successors
         }
         return kids;
