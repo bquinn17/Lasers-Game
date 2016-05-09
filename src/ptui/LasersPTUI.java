@@ -30,8 +30,15 @@ public class LasersPTUI implements Observer {
 
     }
 
+    /**
+     * returns the model
+     * @return the model
+     */
     public LasersModel getModel() { return this.model; }
 
+    /**
+     * help message for PTUI.
+     */
     static void printHelp(){
         System.out.println(
                 "a|add r c: Add laser to (r,c) \n" +

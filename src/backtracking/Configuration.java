@@ -31,5 +31,9 @@ public interface Configuration {
      */
     public boolean isGoal();
 
+    /**
+     * whether the safe can be solved or if it can't
+     * @return a boolean
+     */
     public boolean getIsRip();
 }

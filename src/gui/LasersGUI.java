@@ -110,7 +110,7 @@ public class LasersGUI extends Application implements Observer {
     }*/
 
     /**
-     * The
+     * Initializes variables
      * @param stage the stage to add UI components into
      */
      private void init(Stage stage) {
@@ -171,6 +171,10 @@ public class LasersGUI extends Application implements Observer {
         primaryStage.show();
     }
 
+    /**
+     * creates grid that has buttons to be clicked on to add laser.
+     * @return the grid of the puzzle
+     */
     private GridPane makeButttons(){
         GridPane grid = new GridPane();
         for (int row = 0; row < this.model.getRows() ; row++) {
@@ -189,6 +193,12 @@ public class LasersGUI extends Application implements Observer {
         return grid;
     }
 
+    /**
+     * Assign the laser or pillars with the correct background and picture.
+     * @param button the button that you want to modified.
+     * @param ch the picture you want to be there
+     * @param isRed whether or not that position is wrong
+     */
     private void buttonToPic(Button button, char ch, boolean isRed){
         if (isRed){
             setButtonBackground(button, "red.png");
@@ -253,6 +263,10 @@ public class LasersGUI extends Application implements Observer {
         }
     }
 
+    /**
+     * Loads in a new safe that you want to solve.
+     * @param stage the gui that you are changing
+     */
     private void load(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Safe File");
@@ -275,20 +289,28 @@ public class LasersGUI extends Application implements Observer {
 
     }
 
+    /**
+     * will restart the laser entirely, so you can play again.
+     */
     private void restart() {
         model.resetGrid();
         this.message.setText("The game was reset");
         this.refreshView();
     }
 
+    /**
+     * will solve the puzzle entirely for you. Uses backtracking
+     */
     private void solve() {
         this.model.setGrid(winningConfig);
         this.refreshView();
     }
 
+    /**
+     * Gives you the next position of the laser that you should do only if your laser is correct.
+     */
     private void hint() {
         char[][] grid = this.model.getGrid();
-        //winingconfig
         boolean add = true;
         if(!model.verify()){
             this.message.setText("Hint: no next step");
@@ -316,6 +338,9 @@ public class LasersGUI extends Application implements Observer {
     }
 
 
+    /**
+     * makes sure that you solved the puzzle correctly.
+     */
     private void check() {
         if(model.verify()) {
             message.setText("The safe is fully verified");
@@ -327,6 +352,11 @@ public class LasersGUI extends Application implements Observer {
         }
     }
 
+    /**
+     * puts a laser at a certain position in the grid
+     * @param row row that you are placing the laser
+     * @param col col that you are placing the laser
+     */
     private void setLaser(int row, int col) {
         if(model.getGridAtPosFlipped(col, row) != 'L') {
             model.addLaser(col, row);
@@ -337,6 +367,9 @@ public class LasersGUI extends Application implements Observer {
         refreshView();
     }
 
+    /**
+     * will refress the view and put everything from the model in the gui to the correct spot.
+     */
     private void refreshView() {
         char [][] grid = model.getGrid();
         for (int i = 0; i < model.getRows(); i++) {

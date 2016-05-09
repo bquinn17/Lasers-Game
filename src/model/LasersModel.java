@@ -39,6 +39,10 @@ public class LasersModel extends Observable {
         makeGrid(file, filename);
     }
 
+    /**
+     * Initialises the grid and variables that will be used.
+     * @param model the model of the the safe.
+     */
     public LasersModel(LasersModel model){
         this.rows = model.rows;
         this.columns = model.columns;
@@ -54,12 +58,23 @@ public class LasersModel extends Observable {
         this.file = model.file;
     }
 
+    /**
+     * sets the file that has the grid that we need to solve
+     * @param file the new file to be used for the puzzle.
+     */
     public void setFile(File file){this.file = file;}
 
+    /**
+     * Sets the grid that will be used in the model.
+     * @param grid
+     */
     public void setGrid(char[][] grid){
         this.grid = grid;
     }
 
+    /**
+     * resets the grid with the new file.
+     */
     public void resetGrid(){
         makeGrid(file, "");
     }
@@ -328,6 +343,11 @@ public class LasersModel extends Observable {
         return true;
     }
 
+    /**
+     * sets the message if you can't put a laser in a certain position.
+     * @param j the row
+     * @param i the column
+     */
     private void badLasers(int j, int i){
         message = "Error verifying at : (" + j + " , " + i + ")";
         badCoords.set(0,j);
@@ -392,21 +412,45 @@ public class LasersModel extends Observable {
         return rows;
     }
 
+    /**
+     * A getter method
+     * @return a array of possitions that are invalid to place a laser
+     */
     public ArrayList<Integer> getBadCoords(){
         return this.badCoords;
     }
 
+    /**
+     * a getter method
+     * @return the message to be displayed
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * a getter method that gets the location of an object.
+     * @param row the row it is in
+     * @param col the column it is in
+     * @return the character at that position
+     */
     public char getGridAtPos(int row, int col) {
         return grid[col][row];
     }
 
+    /**
+     * a getter method that gets the location of an object, but flipped.
+     * @param row the row it is in
+     * @param col the column it is in
+     * @return the character at that position
+     */
     public char getGridAtPosFlipped(int row, int col) {
         return grid[row][col];
     }
 
+    /**
+     * a getter method for the grid.
+     * @return the safe
+     */
     public char[][] getGrid(){return this.grid;}
 }

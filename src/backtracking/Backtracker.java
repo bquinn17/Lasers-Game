@@ -35,11 +35,19 @@ public class Backtracker {
         }
     }
 
+    /**
+     * calls the backtracker to run
+     * @param filename the file it is reading
+     */
     public Backtracker(String filename){
         config = new SafeConfig(filename);
         this.solve(config);
     }
 
+    /**
+     * returns the grid.
+     * @return the grid
+     */
     public char[][] getGrid(){
         return config.getGrid();
     }

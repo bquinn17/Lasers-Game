@@ -26,6 +26,10 @@ public class SafeConfig implements Configuration {
     private int currRow;
     private int currCol;
 
+    /**
+     * Initializes all the variables for the backtracking
+     * @param filename the file that it is reading in from the command line.
+     */
     public SafeConfig(String filename) {
         this.model = new LasersModel(filename);
         this.grid = model.getGrid();
@@ -38,6 +42,10 @@ public class SafeConfig implements Configuration {
         currRow = 0;
     }
 
+    /**
+     * Initializes all the variables for the current configuration. Copy constructor.
+     * @param config the current configuration of the safe
+     */
     private SafeConfig(SafeConfig config){
         this.model = new LasersModel(config.model);
         this.grid = this.model.getGrid();
@@ -107,6 +115,9 @@ public class SafeConfig implements Configuration {
         }
     }
 
+    /**
+     * move to the next position in the safe.
+     */
     private void stepForward(){
         this.currRow++;
         if(this.currRow == model.getRows()){
@@ -115,6 +126,11 @@ public class SafeConfig implements Configuration {
         }
     }
 
+    /**
+     * Generates all possible configurations of placing lasers around the piller.
+     * @param pillar the pillar that it is looking for configurations
+     * @return a list of possible children
+     */
     private ArrayList<Configuration> generateChildren(Pillar pillar) {
         ArrayList<int[]> canAdd = new ArrayList<>();
         //A list of all of the coordinates that a laser can be added
@@ -170,6 +186,11 @@ public class SafeConfig implements Configuration {
         return kids;
     }
 
+    /**
+     * looks for every possible position of the laser around the laser.
+     * @param pillar the piller it is checking around
+     * @return how many possible locations there are
+     */
     private int countAround(Pillar pillar) {
         int[]coords = pillar.getCoords();
         int row = coords[0]; int col = coords[1];
@@ -181,6 +202,11 @@ public class SafeConfig implements Configuration {
         return count;
     }
 
+    /**
+     * puts lasers around the pillar
+     * @param pillar the pillar to put lasers arounf\d
+     * @return teh amount of laser it placed
+     */
     private int fillLasers(Pillar pillar){
         int count = pillar.getNumber();
         int[]coords = pillars.get(pillars.size() - 1).getCoords();
@@ -194,6 +220,9 @@ public class SafeConfig implements Configuration {
         return count;
     }
 
+    /**
+     * puts lasers around the pillars that require four lasers.
+     */
     private void solveFours(){
         int count = 0;
         while (this.pillars.get(pillars.size() - 1).getNumber() == 4){
@@ -242,15 +271,22 @@ public class SafeConfig implements Configuration {
         return model.verify();
     }
 
+    @Override
     public boolean getIsRip(){
         return this.isRip;
     }
 
+    /**
+     * returns the current grid.
+     */
     public char[][] getGrid(){
         return model.getGrid();
     }
 
 
+    /**
+     * find all pillars in a grid.
+     */
     private void getPillars(){
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
