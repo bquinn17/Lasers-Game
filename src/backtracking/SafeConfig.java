@@ -76,10 +76,8 @@ public class SafeConfig implements Configuration {
                 successors.add(this);
                 return successors;
             } else { //when count is greater than the number on the pillar
-                if(pillars.size() == 1){
-                    System.out.println("stop");
-                }
                 ArrayList<Configuration> children = generateChildren(pillar);
+                System.out.println("Children: ");
                 children.forEach(System.out::println);
                 successors.addAll(children);
                 return successors; //all possibilities of laser placement for given pillar
@@ -138,22 +136,27 @@ public class SafeConfig implements Configuration {
         int[]coords = pillar.getCoords();
         int row = coords[0]; int col = coords[1];
         if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
-            int[] good = {row+1,col};
+            int[] good = {col,row+1};
+            //int[] good = {row+1,col};
             canAdd.add(good);
         }
         if(row - 1 > 0 && model.getGridAtPos(row -1,col) == '.'){
+            //int[] good = {col,row-1};
             int[] good = {row-1,col};
             canAdd.add(good);
         }
         if(col + 1 < model.getColumns() && model.getGridAtPos(row ,col+1) == '.'){
+            //int[] good = {col+1,row};
             int[] good = {row,col+1};
             canAdd.add(good);
         }
         if(col - 1 > 0 && model.getGridAtPos(row ,col-1) == '.'){
+            //int[] good = {col-1,row};
             int[] good = {row,col-1};
             canAdd.add(good);
         }
         //TODO test this. (I think it works)
+        System.out.println("Can Add: " + canAdd.size());
         int i;
         int index = 0;
         int number = pillar.getNumber();
@@ -176,7 +179,7 @@ public class SafeConfig implements Configuration {
             i = index;
             int endIndex = (number + index) % canAdd.size(); //can loop around to the beginning
             while (i != endIndex){ //puts a laser in the next n positions
-                kid.model.addLaser(canAdd.get(index+i)[0],canAdd.get(index+i)[1]);
+                kid.model.addLaser(canAdd.get(i)[0],canAdd.get(i)[1]);
                 i++;
                 if(i == canAdd.size()) i = 0;
             }
@@ -247,8 +250,9 @@ public class SafeConfig implements Configuration {
         if (currCol == model.getColumns() && currRow == model.getRows()){
             return finished; //if we are at the last position, then the board is either the goal or wrong
         }
+
         if(pillars.get(pillars.size()-1).getNumber() == 0 && !finished) {
-            for (int i = 0; pillars.get(i).getNumber() == 0; i++) {
+            for (int i = 0; i < pillars.size() && pillars.get(i).getNumber() == 0; i++) {
                 int[]coords = pillars.get(i).getCoords();
                 int row = coords[0]; int col = coords[1];
                 if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == 'L'){

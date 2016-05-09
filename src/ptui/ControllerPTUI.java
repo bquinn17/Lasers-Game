@@ -56,7 +56,7 @@ public class ControllerPTUI  {
                 input = input.replaceAll("^\\s+", "");
                 input = input.replaceAll("\\s+$", "");
                 String[] str = input.split(" ");
-                handle_command(str);
+                go = handle_command(str);
             }
             System.out.println("");
         } catch(IOException io){

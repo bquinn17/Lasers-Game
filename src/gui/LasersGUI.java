@@ -1,7 +1,5 @@
 package gui;
 
-import backtracking.Backtracker;
-import backtracking.SafeConfig;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -115,8 +113,10 @@ public class LasersGUI extends Application implements Observer {
      */
      private void init(Stage stage) {
          //TODO add threading
+         /*
          Backtracker solver = new Backtracker(file.getName());
          this.winningConfig = solver.getGrid();
+         */
      }
 
     @Override
