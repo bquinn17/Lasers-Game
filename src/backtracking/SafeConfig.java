@@ -33,7 +33,6 @@ public class SafeConfig implements Configuration {
         this.isRip = false;
         solveFours();
         this.grid = model.getGrid();
-        System.out.println(model);
     }
 
     private SafeConfig(SafeConfig config){
@@ -102,20 +101,20 @@ public class SafeConfig implements Configuration {
             canAdd.add(good);
         }
         if(row - 1 > 0 && model.getGridAtPos(row -1,col) == '.'){
-            int[] good = {row+1,col};
+            int[] good = {row-1,col};
             canAdd.add(good);
         }
         if(col + 1 < model.getColumns() && model.getGridAtPos(row ,col+1) == '.'){
-            int[] good = {row+1,col};
+            int[] good = {row,col+1};
             canAdd.add(good);
         }
         if(col - 1 > 0 && model.getGridAtPos(row ,col-1) == '.'){
-            int[] good = {row+1,col};
+            int[] good = {row,col-1};
             canAdd.add(good);
         }
         int number = pillar.getNumber();
         ArrayList<Configuration> kids = new ArrayList<>(); //full list of successors
-        while (canAdd.size() > number){ //adds n number of lasers each time, then removes the front position
+        while (canAdd.size() >= number){ //adds n number of lasers each time, then removes the front position
             SafeConfig kid = new SafeConfig(this); //create a new configuration using the copy constructor
             int i = 0;
             while (i < number){ //puts a laser in the first n positions
@@ -144,10 +143,10 @@ public class SafeConfig implements Configuration {
         int[]coords = pillars.get(pillars.size() - 1).getCoords();
         pillars.remove(pillars.size() - 1);
         int row = coords[0]; int col = coords[1];
-        if (count > 0 && model.addLaser(row+1,col)) { count--; }
-        if (count > 0 && model.addLaser(row-1,col)) { count--; }
-        if (count > 0 && model.addLaser(row,col-1)) { count--; }
-        if (count > 0 && model.addLaser(row,col+1)) { count--; }
+        if (count > 0 && model.getGridAtPos(row,col) != '*' && model.addLaser(row+1,col)) { count--; }
+        if (count > 0 && model.getGridAtPos(row,col) != '*' && model.addLaser(row-1,col)) { count--; }
+        if (count > 0 && model.getGridAtPos(row,col) != '*' && model.addLaser(row,col-1)) { count--; }
+        if (count > 0 && model.getGridAtPos(row,col) != '*' && model.addLaser(row,col+1)) { count--; }
         if(count > 0){ this.isRip = true; }
         return count;
     }
@@ -158,7 +157,7 @@ public class SafeConfig implements Configuration {
             int[]coords = pillars.get(pillars.size() - 1).getCoords();
             pillars.remove(pillars.size() - 1);
             int row = coords[0]; int col = coords[1];
-            if(model.addLaser(row+1,col)) { count++; }
+            if (model.addLaser(row+1,col)) { count++; }
             if (model.addLaser(row-1,col)) { count++; }
             if (model.addLaser(row,col-1)) { count++; }
             if (model.addLaser(row,col+1)) { count++; }
@@ -172,9 +171,9 @@ public class SafeConfig implements Configuration {
 
     @Override
     public boolean isValid() {
-        if(!model.verify() && pillars.size() > 0) {
+        if(pillars.get(pillars.size()-1).getNumber() == 0 && !model.verify()) {
             for (int i = 0; pillars.get(i).getNumber() == 0; i++) {
-                int[]coords = pillars.get(pillars.size() - i).getCoords();
+                int[]coords = pillars.get(i).getCoords();
                 int row = coords[0]; int col = coords[1];
                 if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == 'L'){
                     return false;

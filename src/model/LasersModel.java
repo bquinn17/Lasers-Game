@@ -43,7 +43,7 @@ public class LasersModel extends Observable {
         this.rows = model.rows;
         this.columns = model.columns;
         this.message = model.message;
-        model.grid = new char[this.rows][this.columns];
+        this.grid = new char[this.rows][this.columns];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 this.grid[i][j] = model.grid[i][j];
@@ -99,7 +99,12 @@ public class LasersModel extends Observable {
     private void createGrid(int rows, int cols, char[][] grid){
         this.rows = rows;
         this.columns = cols;
-        this.grid = grid;
+        this.grid = new char[grid.length][grid[0].length];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                this.grid[i][j] = grid[i][j];
+            }
+        }
         Integer [] array = new Integer[] {0,1,2,3,4};
         this.nums = new ArrayList<Integer>(Arrays.asList(array));
         array = new Integer[] {-1,-1};
