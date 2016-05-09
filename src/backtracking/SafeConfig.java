@@ -47,16 +47,17 @@ public class SafeConfig implements Configuration {
     public Collection<Configuration> getSuccessors() {
         ArrayList<Configuration> successors = new ArrayList<>();
         // TODO
-        if(pillars.size() != 0){
+        if(pillars.get(pillars.size()-1).getNumber() == 0){
             Pillar pillar = pillars.get(pillars.size() - 1);
             int count = countAround(pillar);
             if (count < pillar.getNumber()){
                 return successors; //not enough spots for lasers, invalid successor
-            } else if (count == pillar.getNumber()){
+            } else if (count == pillar.getNumber()){ //fill the rest in with lasers
                 fillLasers(pillar);
                 successors.add(this);
                 return successors;
-            } else {
+            } else { //when count is greater than the number on the pillar
+
                 //TODO generate multiple children
             }
         } else {
@@ -67,19 +68,13 @@ public class SafeConfig implements Configuration {
     }
 
     private int countAround(Pillar pillar) {
-        //TODO
         int[]coords = pillar.getCoords();
         int row = coords[0]; int col = coords[1];
         int count = 0;
-        if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
-            if(model.addLaser(row+1,col)){ count++; }
-        } if(row - 1 > 0 && model.getGridAtPos(row-1,col) == '.'){
-            if (model.addLaser(row - 1,col)) { count++; }
-        } if(col - 1 > 0 && model.getGridAtPos(row,col-1) == '.'){
-            if (model.addLaser(row,col - 1)) { count++; }
-        } if(col + 1 < model.getColumns() && model.getGridAtPos(row,col+1) == '.'){
-            if (model.addLaser(row,col + 1)) { count++; }
-        }
+        if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){ count++;}
+        if(row - 1 > 0 && model.getGridAtPos(row -1,col) == '.'){ count++;}
+        if(col + 1 < model.getColumns() && model.getGridAtPos(row ,col+1) == '.'){ count++;}
+        if(col - 1 > 0 && model.getGridAtPos(row ,col-1) == '.'){ count++;}
         return count;
     }
 
@@ -88,21 +83,11 @@ public class SafeConfig implements Configuration {
         int[]coords = pillars.get(pillars.size() - 1).getCoords();
         pillars.remove(pillars.size() - 1);
         int row = coords[0]; int col = coords[1];
-        if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
-            if(model.addLaser(row+1,col)){ count--; }
-        }
-        if(row - 1 > 0 && model.getGridAtPos(row-1,col) == '.'){
-            if (count > 0 && model.addLaser(row - 1,col)) {  count--; }
-        }
-        if(col - 1 > 0 && model.getGridAtPos(row,col-1) == '.' && count > 0){
-            if (model.addLaser(row,col - 1)) { count--; }
-        }
-        if(col + 1 < model.getColumns() && model.getGridAtPos(row,col+1) == '.' && count > 0){
-            if (model.addLaser(row,col + 1)) { count--; }
-        }
-        if(count < 4){
-            this.isRip = true;
-        }
+        if (count > 0 && model.addLaser(row+1,col)) { count--; }
+        if (count > 0 && model.addLaser(row-1,col)) { count--; }
+        if (count > 0 && model.addLaser(row,col-1)) { count--; }
+        if (count > 0 && model.addLaser(row,col+1)) { count--; }
+        if(count > 0){ this.isRip = true; }
         return count;
     }
 
@@ -112,15 +97,10 @@ public class SafeConfig implements Configuration {
             int[]coords = pillars.get(pillars.size() - 1).getCoords();
             pillars.remove(pillars.size() - 1);
             int row = coords[0]; int col = coords[1];
-            if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
-                if(model.addLaser(row+1,col)){ count++; }
-            } if(row - 1 > 0 && model.getGridAtPos(row-1,col) == '.'){
-                if (model.addLaser(row - 1,col)) { count++; }
-            } if(col - 1 > 0 && model.getGridAtPos(row,col-1) == '.'){
-                if (model.addLaser(row,col - 1)) { count++; }
-            } if(col + 1 < model.getColumns() && model.getGridAtPos(row,col+1) == '.'){
-                if (model.addLaser(row,col + 1)) { count++; }
-            }
+            if(model.addLaser(row+1,col)) { count++; }
+            if (model.addLaser(row-1,col)) { count++; }
+            if (model.addLaser(row,col-1)) { count++; }
+            if (model.addLaser(row,col+1)) { count++; }
             if(count < 4){
                 this.isRip = true;
                 break;
@@ -175,5 +155,10 @@ public class SafeConfig implements Configuration {
             }
 
         }
+    }
+
+    @Override
+    public String toString(){
+        return model.toString();
     }
 }
