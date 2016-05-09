@@ -33,7 +33,6 @@ public class SafeConfig implements Configuration {
         getPillars();
         this.pillars.sort((pillar1, pillar2) -> pillar1.getNumber() - pillar2.getNumber());
         this.isRip = false;
-        solveFours();
         this.grid = model.getGrid();
         currCol = 0;
         currRow = 0;
@@ -50,6 +49,12 @@ public class SafeConfig implements Configuration {
 
     @Override
     public Collection<Configuration> getSuccessors() {
+        //Step 1: Fill in all the lasers for the 4 pillars
+        //Step 2: Fill around the rest of the pillars, generating multiple
+            //successors when necessary
+        //Step 3: Fill in the rest of the empty positions with lasers using
+            //a naive approach
+        if(pillars.get(pillars.size()-1).getNumber() == 4) {solveFours();}
         ArrayList<Configuration> successors = new ArrayList<>();
         if(pillars.size() != 0 && pillars.get(pillars.size()-1).getNumber() != 0){ //if there are still non 0 pillars
             //left in the list of pillars...
@@ -132,32 +137,34 @@ public class SafeConfig implements Configuration {
             int[] good = {row,col-1};
             canAdd.add(good);
         }
+        //TODO test this. (I think it works)
         int i;
         int index = 0;
         int number = pillar.getNumber();
+        ArrayList<Configuration> kids = new ArrayList<>(); //full list of successors
         if(number == 2){ //if the number is two start by making lasers on every other spot
             while(index+2 < canAdd.size()){
                 SafeConfig kid = new SafeConfig(this); //create a new configuration using the copy constructor
-                i = 0;
-                while (i < number){ //puts a laser in the first n positions
+                i = index;
+                while (i < canAdd.size()){ //puts a laser in the first n positions
                     kid.model.addLaser(canAdd.get(i)[0],canAdd.get(i)[1]);
                     i+=2;
                 }
                 index++;
+                kids.add(kid);
             }
         }
         index = 0;
-        ArrayList<Configuration> kids = new ArrayList<>(); //full list of successors
-        while (canAdd.size() >= number){ //adds n number of lasers each time, then removes the front position
+        while (index < canAdd.size()){ //adds n number of lasers each time, then removes the front position
             SafeConfig kid = new SafeConfig(this); //create a new configuration using the copy constructor
             i = index;
-            while (i < number + index){ //puts a laser in the next n positions
+            int endIndex = (number + index) % canAdd.size(); //can loop around to the beginning
+            while (i != endIndex){ //puts a laser in the next n positions
                 kid.model.addLaser(canAdd.get(index+i)[0],canAdd.get(index+i)[1]);
                 i++;
                 if(i == canAdd.size()) i = 0;
             }
-            index++;
-            //canAdd.remove(0); //removes the first coordinate in order to step forward one in the coordinate list
+            index++; //index moves one step forward
             kids.add(kid); //adds to the list of successors
         }
         return kids;
@@ -207,7 +214,11 @@ public class SafeConfig implements Configuration {
 
     @Override
     public boolean isValid() {
-        if(pillars.get(pillars.size()-1).getNumber() == 0 && !model.verify()) {
+        boolean finished = model.verify();
+        if (currCol == model.getColumns() && currRow == model.getRows()){
+            return finished; //if we are at the last position, then the board is either the goal or wrong
+        }
+        if(pillars.get(pillars.size()-1).getNumber() == 0 && !finished) {
             for (int i = 0; pillars.get(i).getNumber() == 0; i++) {
                 int[]coords = pillars.get(i).getCoords();
                 int row = coords[0]; int col = coords[1];
@@ -221,7 +232,7 @@ public class SafeConfig implements Configuration {
                     return false;
                 }
             }
-            // TODO
+            // TODO ??
         }
         return true;
     }
