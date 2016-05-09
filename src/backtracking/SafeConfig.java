@@ -45,8 +45,9 @@ public class SafeConfig implements Configuration {
     @Override
     public Collection<Configuration> getSuccessors() {
         ArrayList<Configuration> successors = new ArrayList<>();
-        if(pillars.get(pillars.size()-1).getNumber() != 0){
+        if(pillars.size() != 0 && pillars.get(pillars.size()-1).getNumber() != 0){
             Pillar pillar = pillars.get(pillars.size() - 1);
+            pillars.remove(pillars.size()-1);
             int count = countAround(pillar);
             if (count < pillar.getNumber()){
                 return successors; //not enough spots for lasers, invalid successor
@@ -55,7 +56,11 @@ public class SafeConfig implements Configuration {
                 successors.add(this);
                 return successors;
             } else { //when count is greater than the number on the pillar
+                if(pillars.size() == 1){
+                    System.out.println("stop");
+                }
                 ArrayList<Configuration> children = generateChildren(pillar);
+                children.forEach(System.out::println);
                 successors.addAll(children);
                 return successors; //all possibilities of laser placement for given pillar
             }
