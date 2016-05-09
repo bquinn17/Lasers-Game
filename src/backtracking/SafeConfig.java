@@ -1,9 +1,11 @@
 package backtracking;
 
 import model.LasersModel;
-
+import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 /**
  * The class represents a single configuration of a safe.  It is
  * used by the backtracker to generate successors, check for
@@ -46,7 +48,6 @@ public class SafeConfig implements Configuration {
     @Override
     public Collection<Configuration> getSuccessors() {
         ArrayList<Configuration> successors = new ArrayList<>();
-        // TODO
         if(pillars.get(pillars.size()-1).getNumber() == 0){
             Pillar pillar = pillars.get(pillars.size() - 1);
             int count = countAround(pillar);
@@ -57,14 +58,77 @@ public class SafeConfig implements Configuration {
                 successors.add(this);
                 return successors;
             } else { //when count is greater than the number on the pillar
-
-                //TODO generate multiple children
+                ArrayList<Configuration> children = generateChildren(pillar);
+                successors.addAll(children);
+                return successors; //all possibilities of laser placement for given pillar
             }
         } else {
-            //TODO fill in the rest of the laser (niave)
+            model.verify();
+            int row = model.getBadCoords().get(0);
+            int col = model.getBadCoords().get(1);
+            if(model.getGridAtPos(row,col) != '.'){ //If verify does not break on white space, this config is invalid
+                return successors;
+            }
+            //If the white space is next to a numbered pillar, this that pillar is already full
+            if (row + 1 < model.getRows() && model.is_pillar(model.getGridAtPos(row + 1, col))) {
+                successors.add(this);
+                return successors;
+            }
+            if (row - 1 > 0 && model.is_pillar(model.getGridAtPos(row + 1, col))) {
+                successors.add(this);
+                return successors;
+            }
+            if (col + 1 < model.getColumns() && model.is_pillar(model.getGridAtPos(row + 1, col))) {
+                successors.add(this);
+                return successors;
+            }
+            if (col - 1 > 0 && model.is_pillar(model.getGridAtPos(row + 1, col))) {
+                successors.add(this);
+                return successors;
+            }
+            SafeConfig kid = new SafeConfig(this);
+            successors.add(kid);
+            successors.add(this);
+            return successors;
+        }
+    }
+
+    private ArrayList<Configuration> generateChildren(Pillar pillar) {
+        ArrayList<int[]> canAdd = new ArrayList<>();
+        //A list of all of the coordinates that a laser can be added
+        //this could be up, down, left, or right
+        int[]coords = pillar.getCoords();
+        int row = coords[0]; int col = coords[1];
+        if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
+            int[] good = {row+1,col};
+            canAdd.add(good);
+        }
+        if(row - 1 > 0 && model.getGridAtPos(row -1,col) == '.'){
+            int[] good = {row+1,col};
+            canAdd.add(good);
+        }
+        if(col + 1 < model.getColumns() && model.getGridAtPos(row ,col+1) == '.'){
+            int[] good = {row+1,col};
+            canAdd.add(good);
+        }
+        if(col - 1 > 0 && model.getGridAtPos(row ,col-1) == '.'){
+            int[] good = {row+1,col};
+            canAdd.add(good);
         }
 
-        return successors;
+        ArrayList<Configuration> kids = new ArrayList<>(); //full list of successors
+        int number = pillar.getNumber();
+        while (canAdd.size() > number){ //adds n number of lasers each time, then removes the front position
+            SafeConfig kid = new SafeConfig(this); //create a new configuration using the copy constructor
+            int i = 0;
+            while (i < number){ //puts a laser in the first n positions
+                kid.model.addLaser(canAdd.get(i)[0],canAdd.get(i)[1]);
+                i++;
+            }
+            canAdd.remove(0); //removes the first coordinate in order to step forward one in the coordinate list
+            kids.add(kid); //adds to the list of successors
+        }
+        return kids;
     }
 
     private int countAround(Pillar pillar) {
