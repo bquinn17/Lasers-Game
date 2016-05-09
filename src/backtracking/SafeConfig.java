@@ -1,10 +1,8 @@
 package backtracking;
 
 import model.LasersModel;
-import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * The class represents a single configuration of a safe.  It is
@@ -48,7 +46,7 @@ public class SafeConfig implements Configuration {
     @Override
     public Collection<Configuration> getSuccessors() {
         ArrayList<Configuration> successors = new ArrayList<>();
-        if(pillars.get(pillars.size()-1).getNumber() == 0){
+        if(pillars.get(pillars.size()-1).getNumber() != 0){
             Pillar pillar = pillars.get(pillars.size() - 1);
             int count = countAround(pillar);
             if (count < pillar.getNumber()){
@@ -115,9 +113,8 @@ public class SafeConfig implements Configuration {
             int[] good = {row+1,col};
             canAdd.add(good);
         }
-
-        ArrayList<Configuration> kids = new ArrayList<>(); //full list of successors
         int number = pillar.getNumber();
+        ArrayList<Configuration> kids = new ArrayList<>(); //full list of successors
         while (canAdd.size() > number){ //adds n number of lasers each time, then removes the front position
             SafeConfig kid = new SafeConfig(this); //create a new configuration using the copy constructor
             int i = 0;
