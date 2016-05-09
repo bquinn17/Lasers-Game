@@ -43,6 +43,7 @@ public class LasersModel extends Observable {
         this.rows = model.rows;
         this.columns = model.columns;
         this.message = model.message;
+        model.grid = new char[this.rows][this.columns];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 this.grid[i][j] = model.grid[i][j];
