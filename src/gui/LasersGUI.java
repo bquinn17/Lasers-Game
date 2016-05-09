@@ -287,8 +287,34 @@ public class LasersGUI extends Application implements Observer {
     }
 
     private void hint() {
-        //TODO
+        char[][] grid = this.model.getGrid();
+        //winingconfig
+        boolean add = true;
+        if(!model.verify()){
+            this.message.setText("Hint: no next step");
+            return;
+        }
+        for (int i = 0; i < model.getRows(); i++) {
+            for (int j = 0; j < model.getColumns(); j++) {
+                if(grid[i][j] == 'L' && winningConfig[i][j] != 'L'){
+                    this.message.setText("Hint: no next step");
+                    return;
+                }
+                if (winningConfig[i][j] == 'L'){
+                    if(add && model.addLaser(i, j)){
+                        add = false;
+                        this.message.setText("Hint: added laser to ("+ i + ","+ j +")");
+                    } else if(add) {
+                        this.message.setText("Hint: no next step");
+                        return;
+                    }
+
+                }
+            }
+        }
+
     }
+
 
     private void check() {
         if(model.verify()) {
