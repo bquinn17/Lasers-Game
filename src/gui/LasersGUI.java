@@ -101,8 +101,6 @@ public class LasersGUI extends Application implements Observer {
         init(primaryStage);  // do all your UI initialization here
 
         GridPane grid = makeButttons();
-        //grid.setPadding(new Insets(10, 10, 10, 10));
-        //grid.setHgap(0); grid.setVgap(0);
         grid.setAlignment(Pos.CENTER);
 
         Button check = new Button("Check");

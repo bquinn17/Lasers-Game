@@ -74,6 +74,7 @@ public class SafeConfig implements Configuration {
             } else if (count == pillar.getNumber()){ //fill the rest in with lasers
                 fillLasers(pillar);
                 successors.add(this);
+
                 return successors;
             } else { //when count is greater than the number on the pillar
                 ArrayList<Configuration> children = generateChildren(pillar);
@@ -92,6 +93,9 @@ public class SafeConfig implements Configuration {
                     return successors;
                 }
             }
+            if(currCol == 2 && currRow == 2){
+                boolean stop = true;
+            }
             //If the white space is next to a numbered pillar, this that pillar is already full
             if (currRow + 1 < model.getRows() && model.is_pillar(model.getGridAtPosFlipped(currRow + 1, currCol))) {
                 System.out.println("found pillar at: ");
@@ -99,6 +103,7 @@ public class SafeConfig implements Configuration {
                 System.out.println("Current col: " + currCol);
                 stepForward();
                 successors.add(this);
+                System.out.println("Child: \n" + this);
                 return successors;
             }
             if (currRow - 1 >= 0 && model.is_pillar(model.getGridAtPosFlipped(currRow - 1, currCol))) {
@@ -107,6 +112,7 @@ public class SafeConfig implements Configuration {
                 System.out.println("Current col: " + currCol);
                 stepForward();
                 successors.add(this);
+                System.out.println("Child: \n" + this);
                 return successors;
             }
             if (currCol + 1 < model.getColumns() && model.is_pillar(model.getGridAtPosFlipped(currRow, currCol+1))) {
@@ -115,6 +121,7 @@ public class SafeConfig implements Configuration {
                 System.out.println("Current col: " + currCol);
                 stepForward();
                 successors.add(this);
+                System.out.println("Child: \n" + this);
                 return successors;
             }
             if (currCol - 1 >= 0 && model.is_pillar(model.getGridAtPosFlipped(currRow, currCol-1))) {
@@ -123,15 +130,20 @@ public class SafeConfig implements Configuration {
                 System.out.println("Current col: " + currCol);
                 stepForward();
                 successors.add(this);
+                System.out.println("Child: \n" + this);
                 return successors;
             }
             //return two children, one with a laser added in the spot, one without
             SafeConfig kid = new SafeConfig(this);
             kid.model.addLaser(currRow,currCol);
+            //move forward one spot
             this.stepForward();
             kid.stepForward();
+            System.out.println("Children: ");
+            System.out.println(this);
+            System.out.println(kid);
             successors.add(kid);
-            successors.add(this);//move forward one spot
+            successors.add(this);
             return successors;
         }
     }
@@ -177,7 +189,7 @@ public class SafeConfig implements Configuration {
             int[] good = {row,col-1};
             canAdd.add(good);
         }
-        System.out.println("Can Add: " + canAdd.size());
+        //System.out.println("Can Add: " + canAdd.size());
 
         int i;
         int index = 0;
@@ -208,7 +220,7 @@ public class SafeConfig implements Configuration {
             index++; //index moves one step forward
             kids.add(kid); //adds to the list of successors
         }
-        System.out.println("Kids: " + kids.size());
+        //System.out.println("Kids: " + kids.size());
         return kids;
     }
 
@@ -273,24 +285,9 @@ public class SafeConfig implements Configuration {
         if (currCol+1 == model.getColumns() && currRow+1 == model.getRows()){
             return finished; //if we are at the last position, then the board is either the goal or wrong
         }
-
-        if(pillars.get(pillars.size()-1).getNumber() == 0 && !finished) {
-            for (int i = 0; i < pillars.size() && pillars.get(i).getNumber() == 0; i++) {
-                int[]coords = pillars.get(i).getCoords();
-                int row = coords[0]; int col = coords[1];
-                if(row + 1 < model.getRows() && model.getGridAtPosFlipped(row +1,col) == 'L'){
-                    return false;
-                } if(row - 1 >= 0 && model.getGridAtPosFlipped(row-1,col) == 'L'){
-                    return false;
-                } if(col - 1 >= 0 && model.getGridAtPosFlipped(row,col-1) == 'L'){
-                    return false;
-                } if(col + 1 < model.getColumns() && model.getGridAtPosFlipped(row,col+1) == 'L'){
-                    return false;
-                }
-            }
-            // TODO ??
-        }
-        return true;
+        int row = model.getBadCoords().get(0);
+        int col = model.getBadCoords().get(1);
+        return model.getGridAtPosFlipped(row, col) == '.';
     }
 
     @Override

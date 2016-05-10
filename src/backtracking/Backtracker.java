@@ -73,7 +73,7 @@ public class Backtracker {
      */
     public Optional<Configuration> solve(Configuration config) {
         debugPrint("Current config", config);
-        System.out.println(config);
+        //System.out.println(config);
         if(!config.getIsRip()){
             if (config.isGoal()) {
                 debugPrint("\tGoal config", config);
