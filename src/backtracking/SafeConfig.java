@@ -77,39 +77,59 @@ public class SafeConfig implements Configuration {
                 return successors;
             } else { //when count is greater than the number on the pillar
                 ArrayList<Configuration> children = generateChildren(pillar);
-                System.out.println("Children: ");
-                children.forEach(System.out::println);
+                //System.out.println("Children: ");
+                //children.forEach(System.out::println);
                 successors.addAll(children);
                 return successors; //all possibilities of laser placement for given pillar
             }
         } else { //begin naive approach
+            if (currCol == model.getColumns()){
+                return successors;
+            }
             while (model.getGridAtPosFlipped(currRow,currCol) != '.'){ //step forward until the next open spot
                 stepForward();
+                if (currCol == model.getColumns()){
+                    return successors;
+                }
             }
             //If the white space is next to a numbered pillar, this that pillar is already full
             if (currRow + 1 < model.getRows() && model.is_pillar(model.getGridAtPosFlipped(currRow + 1, currCol))) {
+                System.out.println("found pillar at: ");
+                System.out.println("Current row: " + currRow);
+                System.out.println("Current col: " + currCol);
                 stepForward();
                 successors.add(this);
                 return successors;
             }
             if (currRow - 1 >= 0 && model.is_pillar(model.getGridAtPosFlipped(currRow - 1, currCol))) {
+                System.out.println("found pillar at: ");
+                System.out.println("Current row: " + currRow);
+                System.out.println("Current col: " + currCol);
                 stepForward();
                 successors.add(this);
                 return successors;
             }
             if (currCol + 1 < model.getColumns() && model.is_pillar(model.getGridAtPosFlipped(currRow, currCol+1))) {
+                System.out.println("found pillar at: ");
+                System.out.println("Current row: " + currRow);
+                System.out.println("Current col: " + currCol);
                 stepForward();
                 successors.add(this);
                 return successors;
             }
             if (currCol - 1 >= 0 && model.is_pillar(model.getGridAtPosFlipped(currRow, currCol-1))) {
+                System.out.println("found pillar at: ");
+                System.out.println("Current row: " + currRow);
+                System.out.println("Current col: " + currCol);
                 stepForward();
                 successors.add(this);
                 return successors;
             }
             //return two children, one with a laser added in the spot, one without
-            stepForward();
             SafeConfig kid = new SafeConfig(this);
+            kid.model.addLaser(currRow,currCol);
+            this.stepForward();
+            kid.stepForward();
             successors.add(kid);
             successors.add(this);//move forward one spot
             return successors;
@@ -250,7 +270,7 @@ public class SafeConfig implements Configuration {
     @Override
     public boolean isValid() {
         boolean finished = model.verify();
-        if (currCol == model.getColumns() && currRow == model.getRows()){
+        if (currCol+1 == model.getColumns() && currRow+1 == model.getRows()){
             return finished; //if we are at the last position, then the board is either the goal or wrong
         }
 
