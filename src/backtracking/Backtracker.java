@@ -104,7 +104,28 @@ public class Backtracker {
      * If there are none, return null.
      */
     public List<Configuration> solveWithPath(Configuration current) {
-        // TODO
-        return new ArrayList<>();  // change this
+        ArrayList<Configuration> possible = new ArrayList<>();
+        if(!current.getIsRip()){
+            if (current.isGoal()) {
+                debugPrint("\tGoal config", current);
+                return Optional.of(current);
+            } else {
+                for (Configuration child : current.getSuccessors()) {
+                    if (child.isValid()) {
+                        debugPrint("\tValid successor", child);
+                        Optional<Configuration> sol = solve(child);
+                        if (sol.isPresent()) {
+                            possible.add(sol);
+                        }
+                    } else {
+                        debugPrint("\tInvalid successor", child);
+                    }
+                }
+                return possible;
+                // implicit backtracking happens here
+            }
+        }
+        return null;
+
     }
 }
