@@ -1,5 +1,6 @@
 package gui;
 
+import backtracking.Backtracker;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -91,8 +92,7 @@ public class LasersGUI extends Application implements Observer {
     private void init(Stage stage) {
         //TODO add threading
          /*
-         Backtracker solver = new Backtracker(file.getName());
-         this.winningConfig = solver.getGrid();
+
          */
     }
 
@@ -278,6 +278,8 @@ public class LasersGUI extends Application implements Observer {
      * will solve the puzzle entirely for you. Uses backtracking
      */
     private void solve() {
+        Backtracker solver = new Backtracker(file.getName());
+        this.winningConfig = solver.getGrid();
         this.model.setGrid(winningConfig);
         this.refreshView();
     }
@@ -286,6 +288,10 @@ public class LasersGUI extends Application implements Observer {
      * Gives you the next position of the laser that you should do only if your laser is correct.
      */
     private void hint() {
+        if(winningConfig == null){
+            Backtracker solver = new Backtracker(file.getName());
+            this.winningConfig = solver.getGrid();
+        }
         char[][] grid = this.model.getGrid();
         boolean add = true;
         if (!model.verify()) {
@@ -310,7 +316,6 @@ public class LasersGUI extends Application implements Observer {
                 }
             }
         }
-
     }
 
 
