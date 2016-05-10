@@ -29,10 +29,14 @@ import java.util.Observer;
  * @author Chris Cassidy
  */
 public class LasersGUI extends Application implements Observer {
-    /** The UI's connection to the model */
+    /**
+     * The UI's connection to the model
+     */
     private LasersModel model;
 
-    /** this can be removed - it is used to demonstrates the button toggle */
+    /**
+     * this can be removed - it is used to demonstrates the button toggle
+     */
     private static boolean status = true;
     private BorderPane border;
     private Button[][] buttons;
@@ -61,15 +65,15 @@ public class LasersGUI extends Application implements Observer {
      * A private utility function for setting the background of a button to
      * an image in the resources subdirectory.
      *
-     * @param button the button control
+     * @param button    the button control
      * @param bgImgName the name of the image file
      */
     private void setButtonBackground(Button button, String bgImgName) {
-        Image laserImg = new Image(getClass().getResourceAsStream("resources/"+ bgImgName));
+        Image laserImg = new Image(getClass().getResourceAsStream("resources/" + bgImgName));
         ImageView laserIcon = new ImageView(laserImg);
         button.setGraphic(laserIcon);
         BackgroundImage backgroundImage = new BackgroundImage(
-                new Image( getClass().getResource("resources/" + bgImgName).toExternalForm()),
+                new Image(getClass().getResource("resources/" + bgImgName).toExternalForm()),
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.CENTER,
@@ -78,46 +82,19 @@ public class LasersGUI extends Application implements Observer {
         button.setBackground(background);
     }
 
-    /**
-     * This is a private demo method that shows how to create a button
-     * and attach a foreground image with a background image that
-     * toggles from yellow to red each time it is pressed.
-     *
-     * @param stage the stage to add components into
-     */
-    /*private void buttonDemo(Stage stage) {
-        // this demonstrates how to create a button and attach a foreground and
-        // background image to it.
-        Button button = new Button();
-        Image laserImg = new Image(getClass().getResourceAsStream("resources/laser.png"));
-        ImageView laserIcon = new ImageView(laserImg);
-        button.setGraphic(laserIcon);
-        setButtonBackground(button, "yellow.png");
-        button.setOnAction(e -> {
-            // toggles background between yellow and red
-            if (!status) {
-                setButtonBackground(button, "yellow.png");
-            } else {
-                setButtonBackground(button, "red.png");
-            }
-            status = !status;
-        });
-
-        Scene scene = new Scene(button);
-        stage.setScene(scene);
-    }*/
 
     /**
      * Initializes variables
+     *
      * @param stage the stage to add UI components into
      */
-     private void init(Stage stage) {
-         //TODO add threading
+    private void init(Stage stage) {
+        //TODO add threading
          /*
          Backtracker solver = new Backtracker(file.getName());
          this.winningConfig = solver.getGrid();
          */
-     }
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -144,7 +121,7 @@ public class LasersGUI extends Application implements Observer {
         bottom.setSpacing(10);
         bottom.getChildren().addAll(check, hint, solve, restart, load);
         bottom.setAlignment(Pos.CENTER);
-        bottom.setPadding(new Insets(10,10,10,10));
+        bottom.setPadding(new Insets(10, 10, 10, 10));
 
         message = new Label(file.getName() + " was loaded");
         message.setTextAlignment(TextAlignment.CENTER);
@@ -153,15 +130,15 @@ public class LasersGUI extends Application implements Observer {
         top.setAlignment(Pos.CENTER);
 
         border.setTop(top);
-        border.setPadding(new Insets(10,10,10,10));
+        border.setPadding(new Insets(10, 10, 10, 10));
         border.setBottom(bottom);
         border.setCenter(grid);
 
         Scene scene = new Scene(border);
 
-        scene.widthProperty().addListener((observable, oldValue, newValue) -> grid.setPrefWidth((Double)newValue));
+        scene.widthProperty().addListener((observable, oldValue, newValue) -> grid.setPrefWidth((Double) newValue));
 
-        scene.heightProperty().addListener((observable, oldValue, newValue) -> grid.setPrefHeight((Double)newValue));
+        scene.heightProperty().addListener((observable, oldValue, newValue) -> grid.setPrefHeight((Double) newValue));
 
         primaryStage.setTitle("Lasers");
         primaryStage.setScene(scene);
@@ -173,16 +150,17 @@ public class LasersGUI extends Application implements Observer {
 
     /**
      * creates grid that has buttons to be clicked on to add laser.
+     *
      * @return the grid of the puzzle
      */
-    private GridPane makeButttons(){
+    private GridPane makeButttons() {
         GridPane grid = new GridPane();
-        for (int row = 0; row < this.model.getRows() ; row++) {
+        for (int row = 0; row < this.model.getRows(); row++) {
             //grid.addColumn(row);
             for (int col = 0; col < this.model.getColumns(); col++) {
                 Button current = new Button();
-                current.setPadding(new Insets(10,10,10,10));
-                buttonToPic(current, model.getGridAtPos(col,row), false);
+                current.setPadding(new Insets(10, 10, 10, 10));
+                buttonToPic(current, model.getGridAtPos(col, row), false);
                 int finalCol = col;
                 int finalRow = row;
                 current.setOnAction(e -> setLaser(finalCol, finalRow));
@@ -195,17 +173,18 @@ public class LasersGUI extends Application implements Observer {
 
     /**
      * Assign the laser or pillars with the correct background and picture.
+     *
      * @param button the button that you want to modified.
-     * @param ch the picture you want to be there
-     * @param isRed whether or not that position is wrong
+     * @param ch     the picture you want to be there
+     * @param isRed  whether or not that position is wrong
      */
-    private void buttonToPic(Button button, char ch, boolean isRed){
-        if (isRed){
+    private void buttonToPic(Button button, char ch, boolean isRed) {
+        if (isRed) {
             setButtonBackground(button, "red.png");
         } else {
             setButtonBackground(button, "white.png");
         }
-        switch (ch){
+        switch (ch) {
             case '0':
                 Image zeroImg = new Image(getClass().getResourceAsStream("resources/pillar0.png"));
                 ImageView zeroIcon = new ImageView(zeroImg);
@@ -243,12 +222,12 @@ public class LasersGUI extends Application implements Observer {
                 //setButtonBackground(button, "pillarX.png");
                 break;
             case '.':
-                if(!isRed) {
+                if (!isRed) {
                     setButtonBackground(button, "white.png");
                 }
                 break;
             case 'L':
-                if(isRed) setButtonBackground(button, "red.png");
+                if (isRed) setButtonBackground(button, "red.png");
                 else setButtonBackground(button, "yellow.png");
 
                 Image laserImg = new Image(getClass().getResourceAsStream("resources/laser.png"));
@@ -265,6 +244,7 @@ public class LasersGUI extends Application implements Observer {
 
     /**
      * Loads in a new safe that you want to solve.
+     *
      * @param stage the gui that you are changing
      */
     private void load(Stage stage) {
@@ -279,8 +259,6 @@ public class LasersGUI extends Application implements Observer {
             this.border.setCenter(makeButttons());
             this.message.setText(testfile.getName() + " was loaded");
             this.refreshView();
-            //TODO resize window.
-            //http://stackoverflow.com/questions/3391373/dynamic-instant-resize-in-javafx
         } else {
             this.message.setText("No file was loaded");
             this.refreshView();
@@ -312,21 +290,21 @@ public class LasersGUI extends Application implements Observer {
     private void hint() {
         char[][] grid = this.model.getGrid();
         boolean add = true;
-        if(!model.verify()){
+        if (!model.verify()) {
             this.message.setText("Hint: no next step");
             return;
         }
         for (int i = 0; i < model.getRows(); i++) {
             for (int j = 0; j < model.getColumns(); j++) {
-                if(grid[i][j] == 'L' && winningConfig[i][j] != 'L'){
+                if (grid[i][j] == 'L' && winningConfig[i][j] != 'L') {
                     this.message.setText("Hint: no next step");
                     return;
                 }
-                if (winningConfig[i][j] == 'L'){
-                    if(add && model.addLaser(i, j)){
+                if (winningConfig[i][j] == 'L') {
+                    if (add && model.addLaser(i, j)) {
                         add = false;
-                        this.message.setText("Hint: added laser to ("+ i + ","+ j +")");
-                    } else if(add) {
+                        this.message.setText("Hint: added laser to (" + i + "," + j + ")");
+                    } else if (add) {
                         this.message.setText("Hint: no next step");
                         return;
                     }
@@ -342,9 +320,9 @@ public class LasersGUI extends Application implements Observer {
      * makes sure that you solved the puzzle correctly.
      */
     private void check() {
-        if(model.verify()) {
+        if (model.verify()) {
             message.setText("The safe is fully verified");
-        }else {
+        } else {
             ArrayList<Integer> coords = model.getBadCoords();
             if (coords.get(0) >= 0 && coords.get(1) >= 0) {
                 buttonToPic(buttons[coords.get(1)][coords.get(0)], model.getGridAtPos(coords.get(1), coords.get(0)), true);
@@ -354,14 +332,14 @@ public class LasersGUI extends Application implements Observer {
 
     /**
      * puts a laser at a certain position in the grid
+     *
      * @param row row that you are placing the laser
      * @param col col that you are placing the laser
      */
     private void setLaser(int row, int col) {
-        if(model.getGridAtPosFlipped(col, row) != 'L') {
+        if (model.getGridAtPosFlipped(col, row) != 'L') {
             model.addLaser(col, row);
-        }
-        else {
+        } else {
             model.removeLaser(col, row);
         }
         refreshView();
@@ -371,7 +349,7 @@ public class LasersGUI extends Application implements Observer {
      * will refress the view and put everything from the model in the gui to the correct spot.
      */
     private void refreshView() {
-        char [][] grid = model.getGrid();
+        char[][] grid = model.getGrid();
         for (int i = 0; i < model.getRows(); i++) {
             for (int j = 0; j < model.getColumns(); j++) {
                 buttonToPic(buttons[j][i], grid[i][j], false);

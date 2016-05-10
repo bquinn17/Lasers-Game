@@ -13,14 +13,17 @@ import java.util.Observer;
  * @author Sean Strout @ RIT CS
  * @author Bryan Quinn
  * @author Chris Cassidy
- * */
+ */
 public class LasersPTUI implements Observer {
-    /** The UI's connection to the model */
+    /**
+     * The UI's connection to the model
+     */
     private LasersModel model;
     public ControllerPTUI controller;
 
     /**
      * Construct the PTUI.  Create the model and initialize the view.
+     *
      * @param filename the safe file name
      */
     public LasersPTUI(String filename) {
@@ -32,14 +35,17 @@ public class LasersPTUI implements Observer {
 
     /**
      * returns the model
+     *
      * @return the model
      */
-    public LasersModel getModel() { return this.model; }
+    public LasersModel getModel() {
+        return this.model;
+    }
 
     /**
      * help message for PTUI.
      */
-    static void printHelp(){
+    static void printHelp() {
         System.out.println(
                 "a|add r c: Add laser to (r,c) \n" +
                         "d|display: Display safe \n" +

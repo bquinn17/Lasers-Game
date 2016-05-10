@@ -13,13 +13,16 @@ import java.util.Scanner;
  * @author Sean Strout @ RIT CS
  * @author Bryan Quinn
  * @author Chris Cassidy
- * */
-public class ControllerPTUI  {
-    /** The UI's connection to the model */
+ */
+public class ControllerPTUI {
+    /**
+     * The UI's connection to the model
+     */
     private LasersModel model;
 
     /**
      * Construct the PTUI.  Create the model and initialize the view.
+     *
      * @param model The laser model
      */
     public ControllerPTUI(LasersModel model) {
@@ -28,6 +31,7 @@ public class ControllerPTUI  {
 
     /**
      * Run the main loop.  This is the entry point for the controller
+     *
      * @param inputFile The name of the input command file, if specified
      */
     public void run(String inputFile) {
@@ -43,14 +47,14 @@ public class ControllerPTUI  {
                     System.out.println("");
                     handle_command(str);
                 }
-            } catch (FileNotFoundException ex){
+            } catch (FileNotFoundException ex) {
                 System.out.println(inputFile + " (The system cannot find the file specified)");
             }
         }
-        try{
+        try {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             boolean go = true;
-            while(go){
+            while (go) {
                 System.out.print("> ");
                 String input = br.readLine();
                 input = input.replaceAll("^\\s+", "");
@@ -59,17 +63,18 @@ public class ControllerPTUI  {
                 go = handle_command(str);
             }
             System.out.println("");
-        } catch(IOException io){
+        } catch (IOException io) {
             io.printStackTrace();
         }
     }
 
     /**
      * Handels all the input and directs them to the correct method to be called.
+     *
      * @param str teh input of the user
      * @return will quit the program.
      */
-    private boolean handle_command(String [] str){
+    private boolean handle_command(String[] str) {
         if (str.length > 0 && str[0].length() > 0) {
             switch (str[0].charAt(0)) {
                 case 'a':

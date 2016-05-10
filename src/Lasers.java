@@ -9,19 +9,26 @@ import ptui.LasersPTUI;
  * It is run on the command line as follows:<br>
  * <br>
  * 1. Plain text UI mode: <br>
- *     java Lasers ptui safe-file [input]<br>
+ * java Lasers ptui safe-file [input]<br>
  * <br>
  * Here, the input file of commands from the file is optional<br>
  * <br>
  * 2. JavaFX GUI mode:<br>
- *     java Lasers gui safe-file<br>
+ * java Lasers gui safe-file<br>
  * <br>
+ *
  * @author James Heliotis @ RIT CS
  * @author Sean Strout @ RIT CS
  */
 public class Lasers {
-    /** The 2 modes are GUI and PTUI */
-    public enum UIMode { GUI, PTUI, UNKNOWN };
+    /**
+     * The 2 modes are GUI and PTUI
+     */
+    public enum UIMode {
+        GUI, PTUI, UNKNOWN
+    }
+
+    ;
 
     /**
      * Displays the usage message and exits the program.
@@ -35,6 +42,7 @@ public class Lasers {
      * The main method reads the command line arguments to determine the
      * UI to run and the input settings.  It then either launches
      * the GUI, or hands control over to the ControllerPTUI's run method.
+     *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
@@ -49,7 +57,7 @@ public class Lasers {
                 safeFile = args[1];
                 try {
                     mode = UIMode.valueOf(args[0].toUpperCase());
-                } catch( IllegalArgumentException iae ) {
+                } catch (IllegalArgumentException iae) {
                     usage();
                 }
                 break;
