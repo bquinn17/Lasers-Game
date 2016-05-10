@@ -154,7 +154,6 @@ public class LasersGUI extends Application implements Observer {
     private GridPane makeButttons() {
         GridPane grid = new GridPane();
         for (int row = 0; row < this.model.getRows(); row++) {
-            //grid.addColumn(row);
             for (int col = 0; col < this.model.getColumns(); col++) {
                 Button current = new Button();
                 current.setPadding(new Insets(10, 10, 10, 10));
@@ -278,9 +277,11 @@ public class LasersGUI extends Application implements Observer {
      * will solve the puzzle entirely for you. Uses backtracking
      */
     private void solve() {
-        Backtracker solver = new Backtracker(file.getName());
+        Backtracker solver = new Backtracker("tests/" + file.getName());
         this.winningConfig = solver.getGrid();
         this.model.setGrid(winningConfig);
+        model.resetGrid();
+        this.border.setCenter(makeButttons());
         this.refreshView();
     }
 
@@ -289,7 +290,7 @@ public class LasersGUI extends Application implements Observer {
      */
     private void hint() {
         if(winningConfig == null){
-            Backtracker solver = new Backtracker(file.getName());
+            Backtracker solver = new Backtracker("tests/" + file.getName());
             this.winningConfig = solver.getGrid();
         }
         char[][] grid = this.model.getGrid();
