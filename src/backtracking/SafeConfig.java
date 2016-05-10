@@ -93,12 +93,12 @@ public class SafeConfig implements Configuration {
                     return successors;
                 }
             }
-            if(currCol == 2 && currRow == 2){
+            if(currCol == 3 && currRow == 3){
                 boolean stop = true;
             }
             //If the white space is next to a numbered pillar, this that pillar is already full
             if (currRow + 1 < model.getRows() && model.is_pillar(model.getGridAtPosFlipped(currRow + 1, currCol))) {
-                System.out.println("found pillar at: ");
+                System.out.println("found pillar near: ");
                 System.out.println("Current row: " + currRow);
                 System.out.println("Current col: " + currCol);
                 stepForward();
@@ -107,7 +107,7 @@ public class SafeConfig implements Configuration {
                 return successors;
             }
             if (currRow - 1 >= 0 && model.is_pillar(model.getGridAtPosFlipped(currRow - 1, currCol))) {
-                System.out.println("found pillar at: ");
+                System.out.println("found pillar near: ");
                 System.out.println("Current row: " + currRow);
                 System.out.println("Current col: " + currCol);
                 stepForward();
@@ -116,7 +116,7 @@ public class SafeConfig implements Configuration {
                 return successors;
             }
             if (currCol + 1 < model.getColumns() && model.is_pillar(model.getGridAtPosFlipped(currRow, currCol+1))) {
-                System.out.println("found pillar at: ");
+                System.out.println("found pillar near: ");
                 System.out.println("Current row: " + currRow);
                 System.out.println("Current col: " + currCol);
                 stepForward();
@@ -125,7 +125,7 @@ public class SafeConfig implements Configuration {
                 return successors;
             }
             if (currCol - 1 >= 0 && model.is_pillar(model.getGridAtPosFlipped(currRow, currCol-1))) {
-                System.out.println("found pillar at: ");
+                System.out.println("found pillar near: ");
                 System.out.println("Current row: " + currRow);
                 System.out.println("Current col: " + currCol);
                 stepForward();
@@ -168,9 +168,6 @@ public class SafeConfig implements Configuration {
         ArrayList<int[]> canAdd = new ArrayList<>();
         //A list of all of the coordinates that a laser can be added
         //this could be up, down, left, or right
-        if(pillars.size() == 1){
-            boolean stop = true;
-        }
         int[]coords = pillar.getCoords();
         int row = coords[0]; int col = coords[1];
         if(row + 1 < model.getRows() && model.getGridAtPosFlipped(row +1,col) == '.'){
@@ -282,7 +279,7 @@ public class SafeConfig implements Configuration {
     @Override
     public boolean isValid() {
         boolean finished = model.verify();
-        if (currCol+1 == model.getColumns() && currRow+1 == model.getRows()){
+        if (currCol == model.getColumns()){
             return finished; //if we are at the last position, then the board is either the goal or wrong
         }
         int row = model.getBadCoords().get(0);
