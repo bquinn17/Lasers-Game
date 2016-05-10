@@ -74,12 +74,13 @@ public class SafeConfig implements Configuration {
             } else if (count == pillar.getNumber()){ //fill the rest in with lasers
                 fillLasers(pillar);
                 successors.add(this);
-
+                System.out.println("Child: ");
+                System.out.println(this);
                 return successors;
             } else { //when count is greater than the number on the pillar
                 ArrayList<Configuration> children = generateChildren(pillar);
-                //System.out.println("Children: ");
-                //children.forEach(System.out::println);
+                System.out.println("Children: ");
+                children.forEach(System.out::println);
                 successors.addAll(children);
                 return successors; //all possibilities of laser placement for given pillar
             }
@@ -186,7 +187,7 @@ public class SafeConfig implements Configuration {
             int[] good = {row,col-1};
             canAdd.add(good);
         }
-        //System.out.println("Can Add: " + canAdd.size());
+        System.out.println("Can Add: " + canAdd.size());
 
         int i;
         int index = 0;
@@ -217,7 +218,7 @@ public class SafeConfig implements Configuration {
             index++; //index moves one step forward
             kids.add(kid); //adds to the list of successors
         }
-        //System.out.println("Kids: " + kids.size());
+        System.out.println("Kids: " + kids.size());
         return kids;
     }
 
@@ -230,27 +231,46 @@ public class SafeConfig implements Configuration {
         int[]coords = pillar.getCoords();
         int row = coords[0]; int col = coords[1];
         int count = 0;
-        if(row + 1 < model.getRows() && model.getGridAtPosFlipped(row +1,col) == '.'){ count++;}
-        if(row - 1 >= 0 && model.getGridAtPosFlipped(row -1,col) == '.'){ count++;}
-        if(col + 1 < model.getColumns() && model.getGridAtPosFlipped(row ,col+1) == '.'){ count++;}
-        if(col - 1 >= 0 && model.getGridAtPosFlipped(row ,col-1) == '.'){ count++;}
+        if(row + 1 < model.getRows() && model.getGridAtPosFlipped(row +1,col) == '.'){
+            count++;
+        } else if (row + 1 < model.getRows() && model.getGridAtPosFlipped(row +1,col) == 'L') {
+            count--;
+        }
+        if(row - 1 >= 0 && model.getGridAtPosFlipped(row -1,col) == '.'){
+            count++;
+        } else if (row - 1 < model.getRows() && model.getGridAtPosFlipped(row -1,col) == 'L') {
+            count--;
+        }
+        if(col + 1 < model.getColumns() && model.getGridAtPosFlipped(row ,col+1) == '.'){
+            count++;
+        } else if (col + 1 < model.getColumns() && model.getGridAtPosFlipped(row ,col+1) == 'L') {
+            count--;
+        }
+        if(col - 1 >= 0 && model.getGridAtPosFlipped(row ,col-1) == '.') {
+            count++;
+        } else if (col - 1 >= 0 && model.getGridAtPosFlipped(row ,col-1) == 'L') {
+            count--;
+        }
         return count;
     }
 
     /**
-     * puts lasers around the pillar
+     * puts lasers around the pillar if there is only one way to place the lasers
      * @param pillar the pillar to put lasers around
-     * @return teh amount of laser it placed
+     * @return the amount of laser it placed
      */
     private int fillLasers(Pillar pillar){
         int count = pillar.getNumber();
-        int[]coords = pillars.get(pillars.size() - 1).getCoords();
-        pillars.remove(pillars.size() - 1);
+        int[]coords = pillar.getCoords();
         int row = coords[0]; int col = coords[1];
-        if (count > 0 && model.getGridAtPosFlipped(row,col) != '*' && model.addLaser(row+1,col)) { count--; }
-        if (count > 0 && model.getGridAtPosFlipped(row,col) != '*' && model.addLaser(row-1,col)) { count--; }
-        if (count > 0 && model.getGridAtPosFlipped(row,col) != '*' && model.addLaser(row,col-1)) { count--; }
-        if (count > 0 && model.getGridAtPosFlipped(row,col) != '*' && model.addLaser(row,col+1)) { count--; }
+        if (row + 1 < model.getRows() && count > 0 && model.getGridAtPosFlipped(row+1,col) != '*'
+                && model.addLaser(row+1,col)) { count--; }
+        if (row - 1 >= 0 && count > 0 && model.getGridAtPosFlipped(row-1,col) != '*' && model.addLaser(row-1,col)) {
+            count--; }
+        if (col - 1 >= 0 && count > 0 && model.getGridAtPosFlipped(row,col-1) != '*' && model.addLaser(row,col-1)) {
+            count--; }
+        if (col + 1 < model.getColumns() && count > 0 && model.getGridAtPosFlipped(row,col+1) != '*'
+                && model.addLaser(row,col+1)) { count--; }
         if(count > 0){ this.isRip = true; }
         return count;
     }
