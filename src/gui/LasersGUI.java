@@ -39,7 +39,6 @@ public class LasersGUI extends Application implements Observer {
     /**
      * this can be removed - it is used to demonstrates the button toggle
      */
-    private static boolean status = true;
     private BorderPane border;
     private Button[][] buttons;
     private Label message;
@@ -58,9 +57,6 @@ public class LasersGUI extends Application implements Observer {
         this.model.addObserver(this);
         border = new BorderPane();
         buttons = new Button[model.getColumns()][model.getRows()];
-        status = true;
-
-
     }
 
     /**
@@ -84,23 +80,8 @@ public class LasersGUI extends Application implements Observer {
         button.setBackground(background);
     }
 
-
-    /**
-     * Initializes variables
-     *
-     * @param stage the stage to add UI components into
-     */
-    private void init(Stage stage) {
-        //TODO add threading
-         /*
-
-         */
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
-        init(primaryStage);  // do all your UI initialization here
-
         GridPane grid = makeButttons();
         grid.setAlignment(Pos.CENTER);
 
@@ -187,37 +168,31 @@ public class LasersGUI extends Application implements Observer {
                 Image zeroImg = new Image(getClass().getResourceAsStream("resources/pillar0.png"));
                 ImageView zeroIcon = new ImageView(zeroImg);
                 button.setGraphic(zeroIcon);
-                //setButtonBackground(button, "pillar0.png");
                 break;
             case '1':
                 Image oneImg = new Image(getClass().getResourceAsStream("resources/pillar1.png"));
                 ImageView oneIcon = new ImageView(oneImg);
                 button.setGraphic(oneIcon);
-                //setButtonBackground(button, "pillar1.png");
                 break;
             case '2':
                 Image twoImg = new Image(getClass().getResourceAsStream("resources/pillar2.png"));
                 ImageView twoIcon = new ImageView(twoImg);
                 button.setGraphic(twoIcon);
-                //setButtonBackground(button, "pillar2.png");
                 break;
             case '3':
                 Image threeImg = new Image(getClass().getResourceAsStream("resources/pillar3.png"));
                 ImageView threeIcon = new ImageView(threeImg);
                 button.setGraphic(threeIcon);
-                //setButtonBackground(button, "pillar3.png");
                 break;
             case '4':
                 Image fourImg = new Image(getClass().getResourceAsStream("resources/pillar4.png"));
                 ImageView fourIcon = new ImageView(fourImg);
                 button.setGraphic(fourIcon);
-                //setButtonBackground(button, "pillar4.png");
                 break;
             case 'X':
                 Image xImg = new Image(getClass().getResourceAsStream("resources/pillarX.png"));
                 ImageView xIcon = new ImageView(xImg);
                 button.setGraphic(xIcon);
-                //setButtonBackground(button, "pillarX.png");
                 break;
             case '.':
                 if (!isRed) {
@@ -261,8 +236,6 @@ public class LasersGUI extends Application implements Observer {
             this.message.setText("No file was loaded");
             this.refreshView();
         }
-        //just do nothing if no file is selected
-
     }
 
     /**
