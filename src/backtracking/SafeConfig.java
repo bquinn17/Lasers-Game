@@ -79,13 +79,13 @@ public class SafeConfig implements Configuration {
             } else if (count == number){ //fill the rest in with lasers
                 fillLasers(pillar);
                 successors.add(this);
-                System.out.println("Child: ");
-                System.out.println(this);
+                //System.out.println("Child: ");
+                //System.out.println(this);
                 return successors;
             } else { //when count is greater than the number on the pillar
                 ArrayList<Configuration> children = generateChildren(pillar);
-                System.out.println("Children: ");
-                children.forEach(System.out::println);
+                //System.out.println("Children: ");
+                //children.forEach(System.out::println);
                 successors.addAll(children);
                 return successors; //all possibilities of laser placement for given pillar
             }
