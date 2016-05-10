@@ -298,7 +298,7 @@ public class LasersGUI extends Application implements Observer {
         if (!model.verify()) {
             int row = model.getBadCoords().get(0);
             int col = model.getBadCoords().get(1);
-            if (model.getGridAtPosFlipped(row, col) != 'L'){
+            if (model.getGridAtPosFlipped(row, col) == 'L'){
                 this.message.setText("Hint: no next step");
                 return;
             }
