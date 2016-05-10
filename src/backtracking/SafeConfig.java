@@ -49,7 +49,7 @@ public class SafeConfig implements Configuration {
     private SafeConfig(SafeConfig config){
         this.model = new LasersModel(config.model);
         this.grid = this.model.getGrid();
-        this.pillars = config.pillars;
+        this.pillars = new ArrayList<>(config.pillars);
         this.isRip = config.isRip;
         this.currCol = config.currCol;
         this.currRow = config.currRow;
@@ -83,7 +83,6 @@ public class SafeConfig implements Configuration {
                 return successors; //all possibilities of laser placement for given pillar
             }
         } else { //begin naive approach
-
             while (model.getGridAtPos(currRow,currRow) != '.'){ //step forward until the next open spot
                 stepForward();
             }
@@ -133,30 +132,29 @@ public class SafeConfig implements Configuration {
         ArrayList<int[]> canAdd = new ArrayList<>();
         //A list of all of the coordinates that a laser can be added
         //this could be up, down, left, or right
+        if(pillars.size() == 1){
+            boolean stop = true;
+        }
         int[]coords = pillar.getCoords();
         int row = coords[0]; int col = coords[1];
         if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
-            int[] good = {col,row+1};
-            //int[] good = {row+1,col};
+            int[] good = {row+1,col};
             canAdd.add(good);
         }
-        if(row - 1 > 0 && model.getGridAtPos(row -1,col) == '.'){
-            //int[] good = {col,row-1};
+        if(row - 1 >= 0 && model.getGridAtPos(row -1,col) == '.'){
             int[] good = {row-1,col};
             canAdd.add(good);
         }
         if(col + 1 < model.getColumns() && model.getGridAtPos(row ,col+1) == '.'){
-            //int[] good = {col+1,row};
             int[] good = {row,col+1};
             canAdd.add(good);
         }
-        if(col - 1 > 0 && model.getGridAtPos(row ,col-1) == '.'){
-            //int[] good = {col-1,row};
+        if(col - 1 >= 0 && model.getGridAtPos(row ,col-1) == '.'){
             int[] good = {row,col-1};
             canAdd.add(good);
         }
-        //TODO test this. (I think it works)
         System.out.println("Can Add: " + canAdd.size());
+
         int i;
         int index = 0;
         int number = pillar.getNumber();
@@ -186,6 +184,7 @@ public class SafeConfig implements Configuration {
             index++; //index moves one step forward
             kids.add(kid); //adds to the list of successors
         }
+        System.out.println("Kids: " + kids.size());
         return kids;
     }
 
@@ -199,15 +198,15 @@ public class SafeConfig implements Configuration {
         int row = coords[0]; int col = coords[1];
         int count = 0;
         if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){ count++;}
-        if(row - 1 > 0 && model.getGridAtPos(row -1,col) == '.'){ count++;}
+        if(row - 1 >= 0 && model.getGridAtPos(row -1,col) == '.'){ count++;}
         if(col + 1 < model.getColumns() && model.getGridAtPos(row ,col+1) == '.'){ count++;}
-        if(col - 1 > 0 && model.getGridAtPos(row ,col-1) == '.'){ count++;}
+        if(col - 1 >= 0 && model.getGridAtPos(row ,col-1) == '.'){ count++;}
         return count;
     }
 
     /**
      * puts lasers around the pillar
-     * @param pillar the pillar to put lasers arounf\d
+     * @param pillar the pillar to put lasers around
      * @return teh amount of laser it placed
      */
     private int fillLasers(Pillar pillar){
@@ -257,9 +256,9 @@ public class SafeConfig implements Configuration {
                 int row = coords[0]; int col = coords[1];
                 if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == 'L'){
                     return false;
-                } if(row - 1 > 0 && model.getGridAtPos(row-1,col) == 'L'){
+                } if(row - 1 >= 0 && model.getGridAtPos(row-1,col) == 'L'){
                     return false;
-                } if(col - 1 > 0 && model.getGridAtPos(row,col-1) == 'L'){
+                } if(col - 1 >= 0 && model.getGridAtPos(row,col-1) == 'L'){
                     return false;
                 } if(col + 1 < model.getColumns() && model.getGridAtPos(row,col+1) == 'L'){
                     return false;

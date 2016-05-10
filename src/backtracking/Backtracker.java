@@ -73,7 +73,7 @@ public class Backtracker {
      */
     public Optional<Configuration> solve(Configuration config) {
         debugPrint("Current config", config);
-        System.out.println(config);
+        //System.out.println(config);
         if(!config.getIsRip()){
             if (config.isGoal()) {
                 debugPrint("\tGoal config", config);
@@ -108,19 +108,21 @@ public class Backtracker {
         if(!current.getIsRip()){
             if (current.isGoal()) {
                 debugPrint("\tGoal config", current);
-                return Optional.of(current);
+                possible.add(current);
+                return possible;
             } else {
                 for (Configuration child : current.getSuccessors()) {
                     if (child.isValid()) {
                         debugPrint("\tValid successor", child);
                         Optional<Configuration> sol = solve(child);
                         if (sol.isPresent()) {
-                            possible.add(sol);
+                            possible.add(sol.get());
                         }
                     } else {
                         debugPrint("\tInvalid successor", child);
                     }
                 }
+                possible.addAll(solveWithPath(config));
                 return possible;
                 // implicit backtracking happens here
             }
