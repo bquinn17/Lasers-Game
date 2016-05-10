@@ -41,15 +41,21 @@ public class Backtracker {
      */
     public Backtracker(String filename){
         config = new SafeConfig(filename);
-        this.solve(config);
+        Optional solution = this.solve(config);
+        if(solution.isPresent()) {
+            this.config = (SafeConfig) solution.get();
+        }
+        else {
+            this.config = null;
+        }
     }
 
     /**
      * returns the grid.
      * @return the grid
      */
-    public char[][] getGrid(){
-        return config.getGrid();
+    public Configuration getSolution(){
+        return config;
     }
 
     /**

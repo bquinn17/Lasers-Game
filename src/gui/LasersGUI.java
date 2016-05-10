@@ -1,6 +1,7 @@
 package gui;
 
 import backtracking.Backtracker;
+import backtracking.SafeConfig;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -278,8 +279,9 @@ public class LasersGUI extends Application implements Observer {
      */
     private void solve() {
         Backtracker solver = new Backtracker("tests/" + file.getName());
-        this.winningConfig = solver.getGrid();
-
+        SafeConfig solution = (SafeConfig) solver.getSolution();
+        this.winningConfig = solution.getGrid();
+        System.out.println(solution);
         this.model.setGrid(winningConfig);
         model.resetGrid();
         this.border.setCenter(makeButttons());
@@ -292,7 +294,8 @@ public class LasersGUI extends Application implements Observer {
     private void hint() {
         if(winningConfig == null){
             Backtracker solver = new Backtracker("tests/" + file.getName());
-            this.winningConfig = solver.getGrid();
+            SafeConfig solution = (SafeConfig) solver.getSolution();
+            this.winningConfig = solution.getGrid();
         }
         char[][] grid = this.model.getGrid();
         if (!model.verify()) {
