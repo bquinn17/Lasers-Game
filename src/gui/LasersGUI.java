@@ -298,7 +298,7 @@ public class LasersGUI extends Application implements Observer {
         if (!model.verify()) {
             int row = model.getBadCoords().get(0);
             int col = model.getBadCoords().get(1);
-            if (model.getGridAtPosFlipped(row, col) != 'L'){
+            if (model.getGridAtPosFlipped(row, col) == 'L'){
                 this.message.setText("Hint: no next step");
                 return;
             }
@@ -306,15 +306,15 @@ public class LasersGUI extends Application implements Observer {
             message.setText("The safe is fully verified");
             return;
         }
+        boolean add = true;
         for (int i = 0; i < model.getRows(); i++) {
             for (int j = 0; j < model.getColumns(); j++) {
                 if (grid[i][j] == 'L' && winningConfig[i][j] != 'L') {
                     this.message.setText("Hint: no next step");
                     return;
                 }
-                if (winningConfig[i][j] == 'L') {
-                    boolean add = true;
-                    if (model.addLaser(i, j)) {
+                if (winningConfig[i][j] == 'L' && grid[i][j] != 'L') {
+                    if (add && model.addLaser(i, j)) {
                         add = false;
                         this.message.setText("Hint: added laser to (" + i + "," + j + ")");
                     } else if (add) {
