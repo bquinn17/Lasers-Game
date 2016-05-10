@@ -257,6 +257,7 @@ public class LasersGUI extends Application implements Observer {
             this.border.setCenter(makeButttons());
             this.message.setText(testfile.getName() + " was loaded");
             this.refreshView();
+            this.winningConfig = null;
         } else {
             this.message.setText("No file was loaded");
             this.refreshView();
