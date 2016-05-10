@@ -281,10 +281,7 @@ public class LasersGUI extends Application implements Observer {
         Backtracker solver = new Backtracker("tests/" + file.getName());
         SafeConfig solution = (SafeConfig) solver.getSolution();
         this.winningConfig = solution.getGrid();
-        System.out.println(solution);
         this.model.setGrid(winningConfig);
-        model.resetGrid();
-        this.border.setCenter(makeButttons());
         this.refreshView();
     }
 
@@ -361,7 +358,7 @@ public class LasersGUI extends Application implements Observer {
     }
 
     /**
-     * will refress the view and put everything from the model in the gui to the correct spot.
+     * will refreshes the view and put everything from the model in the gui to the correct spot.
      */
     private void refreshView() {
         char[][] grid = model.getGrid();
