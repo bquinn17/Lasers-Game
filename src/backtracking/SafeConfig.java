@@ -302,6 +302,17 @@ public class SafeConfig implements Configuration {
     public boolean isValid() {
         boolean finished = model.verify();
         if (finished) return true;
+
+        for (int j = 0; j < pillars.size() && pillars.get(j).getNumber() == 0; j++) {
+            Pillar pillar = pillars.get(j);
+            int[]coords = pillar.getCoords();
+            int row = coords[0]; int col = coords[1];
+            if (row + 1 < model.getRows() && model.getGridAtPosFlipped(row+1,col) == 'L') {return false;}
+            if (row - 1 >= 0 &&  model.getGridAtPosFlipped(row-1,col) == 'L') {return false;}
+            if (col - 1 >= 0 && model.getGridAtPosFlipped(row,col-1) == 'L') {return false;}
+            if (col + 1 < model.getColumns() && model.getGridAtPosFlipped(row,col+1) == 'L') {return false;}
+        }
+
         int row = model.getBadCoords().get(0);
         int col = model.getBadCoords().get(1);
         return (model.getGridAtPosFlipped(row, col) != 'L');
