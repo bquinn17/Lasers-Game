@@ -30,7 +30,7 @@ public class SafeSolverPath {
 
             // compute the elapsed time
             System.out.println("Elapsed time: " +
-                    (System.currentTimeMillis() - start)/1000.0 + " seconds.");
+                    (System.currentTimeMillis() - start) / 1000.0 + " seconds.");
 
             // indicate whether there was a solution, or not
             if (path != null) {
@@ -43,6 +43,7 @@ public class SafeSolverPath {
                 }
             } else {
                 System.out.println("No solution!");
-            }        }
+            }
+        }
     }
 }
