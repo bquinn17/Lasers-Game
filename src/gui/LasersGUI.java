@@ -279,6 +279,7 @@ public class LasersGUI extends Application implements Observer {
     private void solve() {
         Backtracker solver = new Backtracker("tests/" + file.getName());
         this.winningConfig = solver.getGrid();
+
         this.model.setGrid(winningConfig);
         model.resetGrid();
         this.border.setCenter(makeButttons());
@@ -294,7 +295,6 @@ public class LasersGUI extends Application implements Observer {
             this.winningConfig = solver.getGrid();
         }
         char[][] grid = this.model.getGrid();
-        boolean add = true;
         if (!model.verify()) {
             int row = model.getBadCoords().get(0);
             int col = model.getBadCoords().get(1);
@@ -313,7 +313,8 @@ public class LasersGUI extends Application implements Observer {
                     return;
                 }
                 if (winningConfig[i][j] == 'L') {
-                    if (add && model.addLaser(i, j)) {
+                    boolean add = true;
+                    if (model.addLaser(i, j)) {
                         add = false;
                         this.message.setText("Hint: added laser to (" + i + "," + j + ")");
                     } else if (add) {
