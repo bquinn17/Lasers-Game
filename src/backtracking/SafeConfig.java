@@ -68,6 +68,9 @@ public class SafeConfig implements Configuration {
             //left in the list of pillars...
             Pillar pillar = pillars.get(pillars.size() - 1);
             pillars.remove(pillars.size()-1);
+            if(pillar.getNumber() == 2 ){
+                boolean stop = true;
+            }
             int[] values = countAround(pillar);
             int count = values[0];
             int number = pillar.getNumber() - values[1];
