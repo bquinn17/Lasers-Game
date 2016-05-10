@@ -83,26 +83,26 @@ public class SafeConfig implements Configuration {
                 return successors; //all possibilities of laser placement for given pillar
             }
         } else { //begin naive approach
-            while (model.getGridAtPos(currRow,currCol) != '.'){ //step forward until the next open spot
+            while (model.getGridAtPosFlipped(currRow,currCol) != '.'){ //step forward until the next open spot
                 stepForward();
             }
             //If the white space is next to a numbered pillar, this that pillar is already full
-            if (currRow + 1 < model.getRows() && model.is_pillar(model.getGridAtPos(currRow + 1, currCol))) {
+            if (currRow + 1 < model.getRows() && model.is_pillar(model.getGridAtPosFlipped(currRow + 1, currCol))) {
                 stepForward();
                 successors.add(this);
                 return successors;
             }
-            if (currRow - 1 >= 0 && model.is_pillar(model.getGridAtPos(currRow - 1, currCol))) {
+            if (currRow - 1 >= 0 && model.is_pillar(model.getGridAtPosFlipped(currRow - 1, currCol))) {
                 stepForward();
                 successors.add(this);
                 return successors;
             }
-            if (currCol + 1 < model.getColumns() && model.is_pillar(model.getGridAtPos(currRow, currCol+1))) {
+            if (currCol + 1 < model.getColumns() && model.is_pillar(model.getGridAtPosFlipped(currRow, currCol+1))) {
                 stepForward();
                 successors.add(this);
                 return successors;
             }
-            if (currCol - 1 >= 0 && model.is_pillar(model.getGridAtPos(currRow, currCol-1))) {
+            if (currCol - 1 >= 0 && model.is_pillar(model.getGridAtPosFlipped(currRow, currCol-1))) {
                 stepForward();
                 successors.add(this);
                 return successors;
@@ -141,19 +141,19 @@ public class SafeConfig implements Configuration {
         }
         int[]coords = pillar.getCoords();
         int row = coords[0]; int col = coords[1];
-        if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){
+        if(row + 1 < model.getRows() && model.getGridAtPosFlipped(row +1,col) == '.'){
             int[] good = {row+1,col};
             canAdd.add(good);
         }
-        if(row - 1 >= 0 && model.getGridAtPos(row -1,col) == '.'){
+        if(row - 1 >= 0 && model.getGridAtPosFlipped(row -1,col) == '.'){
             int[] good = {row-1,col};
             canAdd.add(good);
         }
-        if(col + 1 < model.getColumns() && model.getGridAtPos(row ,col+1) == '.'){
+        if(col + 1 < model.getColumns() && model.getGridAtPosFlipped(row ,col+1) == '.'){
             int[] good = {row,col+1};
             canAdd.add(good);
         }
-        if(col - 1 >= 0 && model.getGridAtPos(row ,col-1) == '.'){
+        if(col - 1 >= 0 && model.getGridAtPosFlipped(row ,col-1) == '.'){
             int[] good = {row,col-1};
             canAdd.add(good);
         }
@@ -201,10 +201,10 @@ public class SafeConfig implements Configuration {
         int[]coords = pillar.getCoords();
         int row = coords[0]; int col = coords[1];
         int count = 0;
-        if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == '.'){ count++;}
-        if(row - 1 >= 0 && model.getGridAtPos(row -1,col) == '.'){ count++;}
-        if(col + 1 < model.getColumns() && model.getGridAtPos(row ,col+1) == '.'){ count++;}
-        if(col - 1 >= 0 && model.getGridAtPos(row ,col-1) == '.'){ count++;}
+        if(row + 1 < model.getRows() && model.getGridAtPosFlipped(row +1,col) == '.'){ count++;}
+        if(row - 1 >= 0 && model.getGridAtPosFlipped(row -1,col) == '.'){ count++;}
+        if(col + 1 < model.getColumns() && model.getGridAtPosFlipped(row ,col+1) == '.'){ count++;}
+        if(col - 1 >= 0 && model.getGridAtPosFlipped(row ,col-1) == '.'){ count++;}
         return count;
     }
 
@@ -218,10 +218,10 @@ public class SafeConfig implements Configuration {
         int[]coords = pillars.get(pillars.size() - 1).getCoords();
         pillars.remove(pillars.size() - 1);
         int row = coords[0]; int col = coords[1];
-        if (count > 0 && model.getGridAtPos(row,col) != '*' && model.addLaser(row+1,col)) { count--; }
-        if (count > 0 && model.getGridAtPos(row,col) != '*' && model.addLaser(row-1,col)) { count--; }
-        if (count > 0 && model.getGridAtPos(row,col) != '*' && model.addLaser(row,col-1)) { count--; }
-        if (count > 0 && model.getGridAtPos(row,col) != '*' && model.addLaser(row,col+1)) { count--; }
+        if (count > 0 && model.getGridAtPosFlipped(row,col) != '*' && model.addLaser(row+1,col)) { count--; }
+        if (count > 0 && model.getGridAtPosFlipped(row,col) != '*' && model.addLaser(row-1,col)) { count--; }
+        if (count > 0 && model.getGridAtPosFlipped(row,col) != '*' && model.addLaser(row,col-1)) { count--; }
+        if (count > 0 && model.getGridAtPosFlipped(row,col) != '*' && model.addLaser(row,col+1)) { count--; }
         if(count > 0){ this.isRip = true; }
         return count;
     }
@@ -258,13 +258,13 @@ public class SafeConfig implements Configuration {
             for (int i = 0; i < pillars.size() && pillars.get(i).getNumber() == 0; i++) {
                 int[]coords = pillars.get(i).getCoords();
                 int row = coords[0]; int col = coords[1];
-                if(row + 1 < model.getRows() && model.getGridAtPos(row +1,col) == 'L'){
+                if(row + 1 < model.getRows() && model.getGridAtPosFlipped(row +1,col) == 'L'){
                     return false;
-                } if(row - 1 >= 0 && model.getGridAtPos(row-1,col) == 'L'){
+                } if(row - 1 >= 0 && model.getGridAtPosFlipped(row-1,col) == 'L'){
                     return false;
-                } if(col - 1 >= 0 && model.getGridAtPos(row,col-1) == 'L'){
+                } if(col - 1 >= 0 && model.getGridAtPosFlipped(row,col-1) == 'L'){
                     return false;
-                } if(col + 1 < model.getColumns() && model.getGridAtPos(row,col+1) == 'L'){
+                } if(col + 1 < model.getColumns() && model.getGridAtPosFlipped(row,col+1) == 'L'){
                     return false;
                 }
             }
