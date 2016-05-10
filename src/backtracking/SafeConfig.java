@@ -68,7 +68,7 @@ public class SafeConfig implements Configuration {
             //left in the list of pillars...
             Pillar pillar = pillars.get(pillars.size() - 1);
             pillars.remove(pillars.size()-1);
-            if(pillar.getNumber() == 2 ){
+            if(pillar.getNumber() == 3 ){
                 boolean stop = true;
             }
             int[] values = countAround(pillar);
@@ -304,7 +304,13 @@ public class SafeConfig implements Configuration {
         if (finished) return true;
         int row = model.getBadCoords().get(0);
         int col = model.getBadCoords().get(1);
-        return model.getGridAtPosFlipped(row, col) == '.';
+        return (model.getGridAtPosFlipped(row, col) != 'L');
+        /*
+        if(model.getGridAtPosFlipped(row, col) != '.') {
+            return model.is_pillar(model.getGridAtPosFlipped(row, col));
+        }
+        return false;*/
+
     }
 
     @Override
