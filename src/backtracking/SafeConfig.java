@@ -64,7 +64,7 @@ public class SafeConfig implements Configuration {
             //a naive approach
         if(pillars.get(pillars.size()-1).getNumber() == 4) {solveFours();}
         ArrayList<Configuration> successors = new ArrayList<>();
-        /*if(pillars.size() != 0 && pillars.get(pillars.size()-1).getNumber() != 0){ //if there are still non 0 pillars
+        if(pillars.size() != 0 && pillars.get(pillars.size()-1).getNumber() != 0){ //if there are still non 0 pillars
             //left in the list of pillars...
             Pillar pillar = pillars.get(pillars.size() - 1);
             pillars.remove(pillars.size()-1);
@@ -82,7 +82,7 @@ public class SafeConfig implements Configuration {
                 successors.addAll(children);
                 return successors; //all possibilities of laser placement for given pillar
             }
-        } else { *///begin naive approach
+        } else { //begin naive approach
             while (model.getGridAtPos(currRow,currCol) != '.'){ //step forward until the next open spot
                 stepForward();
             }
@@ -113,7 +113,7 @@ public class SafeConfig implements Configuration {
             successors.add(kid);
             successors.add(this);//move forward one spot
             return successors;
-        //}
+        }
     }
 
     /**
