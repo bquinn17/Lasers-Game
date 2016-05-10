@@ -87,19 +87,19 @@ public class SafeConfig implements Configuration {
                 stepForward();
             }
             //If the white space is next to a numbered pillar, this that pillar is already full
-            if (currRow + 1 < model.getRows() && model.is_pillar(model.getGridAtPos(currRow + 1, currRow))) {
+            if (currRow + 1 < model.getRows() && model.is_pillar(model.getGridAtPos(currRow + 1, currCol))) {
                 successors.add(this);
                 return successors;
             }
-            if (currRow - 1 > 0 && model.is_pillar(model.getGridAtPos(currRow + 1, currRow))) {
+            if (currRow - 1 >= 0 && model.is_pillar(model.getGridAtPos(currRow - 1, currCol))) {
                 successors.add(this);
                 return successors;
             }
-            if (currRow + 1 < model.getColumns() && model.is_pillar(model.getGridAtPos(currRow + 1, currRow))) {
+            if (currCol + 1 < model.getColumns() && model.is_pillar(model.getGridAtPos(currRow, currCol+1))) {
                 successors.add(this);
                 return successors;
             }
-            if (currRow - 1 > 0 && model.is_pillar(model.getGridAtPos(currRow + 1, currRow))) {
+            if (currCol - 1 >= 0 && model.is_pillar(model.getGridAtPos(currRow, currCol-1))) {
                 successors.add(this);
                 return successors;
             }
@@ -109,7 +109,7 @@ public class SafeConfig implements Configuration {
             successors.add(this);
             stepForward(); //move forward one spot
             return successors;
-        }
+        //}
     }
 
     /**
