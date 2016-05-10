@@ -64,7 +64,7 @@ public class SafeConfig implements Configuration {
             //a naive approach
         if(pillars.get(pillars.size()-1).getNumber() == 4) {solveFours();}
         ArrayList<Configuration> successors = new ArrayList<>();
-        if(pillars.size() != 0 && pillars.get(pillars.size()-1).getNumber() != 0){ //if there are still non 0 pillars
+        /*if(pillars.size() != 0 && pillars.get(pillars.size()-1).getNumber() != 0){ //if there are still non 0 pillars
             //left in the list of pillars...
             Pillar pillar = pillars.get(pillars.size() - 1);
             pillars.remove(pillars.size()-1);
@@ -82,32 +82,36 @@ public class SafeConfig implements Configuration {
                 successors.addAll(children);
                 return successors; //all possibilities of laser placement for given pillar
             }
-        } else { //begin naive approach
-            while (model.getGridAtPos(currRow,currRow) != '.'){ //step forward until the next open spot
+        } else { *///begin naive approach
+            while (model.getGridAtPos(currRow,currCol) != '.'){ //step forward until the next open spot
                 stepForward();
             }
             //If the white space is next to a numbered pillar, this that pillar is already full
             if (currRow + 1 < model.getRows() && model.is_pillar(model.getGridAtPos(currRow + 1, currCol))) {
+                stepForward();
                 successors.add(this);
                 return successors;
             }
             if (currRow - 1 >= 0 && model.is_pillar(model.getGridAtPos(currRow - 1, currCol))) {
+                stepForward();
                 successors.add(this);
                 return successors;
             }
             if (currCol + 1 < model.getColumns() && model.is_pillar(model.getGridAtPos(currRow, currCol+1))) {
+                stepForward();
                 successors.add(this);
                 return successors;
             }
             if (currCol - 1 >= 0 && model.is_pillar(model.getGridAtPos(currRow, currCol-1))) {
+                stepForward();
                 successors.add(this);
                 return successors;
             }
             //return two children, one with a laser added in the spot, one without
+            stepForward();
             SafeConfig kid = new SafeConfig(this);
             successors.add(kid);
-            successors.add(this);
-            stepForward(); //move forward one spot
+            successors.add(this);//move forward one spot
             return successors;
         //}
     }
