@@ -68,9 +68,6 @@ public class SafeConfig implements Configuration {
             //left in the list of pillars...
             Pillar pillar = pillars.get(pillars.size() - 1);
             pillars.remove(pillars.size()-1);
-            if(pillar.getNumber() == 3 ){
-                boolean stop = true;
-            }
             int[] values = countAround(pillar);
             int count = values[0];
             int number = pillar.getNumber() - values[1];
@@ -79,13 +76,9 @@ public class SafeConfig implements Configuration {
             } else if (count == number){ //fill the rest in with lasers
                 fillLasers(pillar);
                 successors.add(this);
-                //System.out.println("Child: ");
-                //System.out.println(this);
                 return successors;
             } else { //when count is greater than the number on the pillar
                 ArrayList<Configuration> children = generateChildren(pillar);
-                //System.out.println("Children: ");
-                //children.forEach(System.out::println);
                 successors.addAll(children);
                 return successors; //all possibilities of laser placement for given pillar
             }
@@ -101,39 +94,23 @@ public class SafeConfig implements Configuration {
             }
             //If the white space is next to a numbered pillar, this that pillar is already full
             if (currRow + 1 < model.getRows() && model.is_pillar(model.getGridAtPosFlipped(currRow + 1, currCol))) {
-                //System.out.println("found pillar near: ");
-                //System.out.println("Current row: " + currRow);
-                //System.out.println("Current col: " + currCol);
                 stepForward();
                 successors.add(this);
-                //System.out.println("Child: \n" + this);
                 return successors;
             }
             if (currRow - 1 >= 0 && model.is_pillar(model.getGridAtPosFlipped(currRow - 1, currCol))) {
-                //System.out.println("found pillar near: ");
-                //System.out.println("Current row: " + currRow);
-                //System.out.println("Current col: " + currCol);
                 stepForward();
                 successors.add(this);
-                //System.out.println("Child: \n" + this);
                 return successors;
             }
             if (currCol + 1 < model.getColumns() && model.is_pillar(model.getGridAtPosFlipped(currRow, currCol+1))) {
-                //System.out.println("found pillar near: ");
-                //System.out.println("Current row: " + currRow);
-                //System.out.println("Current col: " + currCol);
                 stepForward();
                 successors.add(this);
-                //System.out.println("Child: \n" + this);
                 return successors;
             }
             if (currCol - 1 >= 0 && model.is_pillar(model.getGridAtPosFlipped(currRow, currCol-1))) {
-                //System.out.println("found pillar near: ");
-                //System.out.println("Current row: " + currRow);
-                //System.out.println("Current col: " + currCol);
                 stepForward();
                 successors.add(this);
-                //System.out.println("Child: \n" + this);
                 return successors;
             }
             //return two children, one with a laser added in the spot, one without
@@ -142,9 +119,6 @@ public class SafeConfig implements Configuration {
             //move forward one spot
             this.stepForward();
             kid.stepForward();
-            //System.out.println("Children: ");
-            //System.out.println(this);
-            //System.out.println(kid);
             successors.add(kid);
             successors.add(this);
             return successors;
@@ -189,8 +163,6 @@ public class SafeConfig implements Configuration {
             int[] good = {row,col-1};
             canAdd.add(good);
         }
-        //System.out.println("Can Add: " + canAdd.size());
-
         int i;
         int index = 0;
         int number = pillar.getNumber();
@@ -220,7 +192,6 @@ public class SafeConfig implements Configuration {
             index++; //index moves one step forward
             kids.add(kid); //adds to the list of successors
         }
-        //System.out.println("Kids: " + kids.size());
         return kids;
     }
 
@@ -316,12 +287,6 @@ public class SafeConfig implements Configuration {
         int row = model.getBadCoords().get(0);
         int col = model.getBadCoords().get(1);
         return (model.getGridAtPosFlipped(row, col) != 'L');
-        /*
-        if(model.getGridAtPosFlipped(row, col) != '.') {
-            return model.is_pillar(model.getGridAtPosFlipped(row, col));
-        }
-        return false;*/
-
     }
 
     @Override
