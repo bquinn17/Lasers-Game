@@ -263,6 +263,8 @@ public class LasersGUI extends Application implements Observer {
      * Gives you the next position of the laser that you should do only if your laser is correct.
      */
     private void hint() {
+        int aRow = 0;
+        int aCol = 0;
         if(winningConfig == null){
             Backtracker solver = new Backtracker("tests/" + file.getName());
             SafeConfig solution = (SafeConfig) solver.getSolution();
@@ -284,14 +286,18 @@ public class LasersGUI extends Application implements Observer {
         for (int i = 0; i < model.getRows(); i++) {
             for (int j = 0; j < model.getColumns(); j++) {
                 if (grid[i][j] == 'L' && winningConfig[i][j] != 'L') {
+                    model.removeLaser(aRow,aCol);
                     this.message.setText("Hint: no next step");
                     return;
                 }
                 if (winningConfig[i][j] == 'L' && grid[i][j] != 'L') {
                     if (add && model.addLaser(i, j)) {
+                        aRow = i;
+                        aCol = j;
                         add = false;
                         this.message.setText("Hint: added laser to (" + i + "," + j + ")");
                     } else if (add) {
+                        model.removeLaser(aRow,aCol);
                         this.message.setText("Hint: no next step");
                         return;
                     }
