@@ -161,7 +161,7 @@ public class LasersGUI extends Application implements Observer {
         if (isRed) {
             setButtonBackground(button, "red.png");
         } else {
-            setButtonBackground(button, "white.png");
+                setButtonBackground(button, "white.png");
         }
         switch (ch) {
             case '0':
