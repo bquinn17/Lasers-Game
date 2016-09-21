@@ -1,6 +1,6 @@
 # Lasers-Game
 
-This is game that we completed for our final project in class. It is written entirely in Java and used the Java 8 GUI framework. Some of the project files were outlined for us, but all of the code was implemented by my partener and I.
+This is game that we completed for our final project in class. It is written entirely in Java and used the JavaFX GUI framework. Some of the project files were outlined for us, but all of the code was implemented by my partener and I.
 
 The key part of this project is that it uses a recurive depth first search algorithm in order to find a solution, given an input. This part was written entirely by me. It also follows the MVC design concept for creating graphical user interfaces.
 
